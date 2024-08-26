@@ -4,7 +4,7 @@ part of common_lib;
 
 
 
-class CustomDottedLine extends StatelessWidget {
+class MoonDottedLine extends StatelessWidget {
 
   final double width;
   final double height;
@@ -15,7 +15,7 @@ class CustomDottedLine extends StatelessWidget {
 
   double get numberOfDot => height / (lineHeight + space) - 1;
 
-  const CustomDottedLine({
+  const MoonDottedLine({
     super.key,
     required this.width,
     required this.height,
@@ -24,6 +24,17 @@ class CustomDottedLine extends StatelessWidget {
     required this.space,
     required this.color
   });
+
+  MoonDottedLine.fromDottedLineUIModel({
+    super.key,
+    required this.width,
+    required this.height,
+    required MoonDottedLineUIModel dottedLineUIModel
+  })
+  : lineWidth = dottedLineUIModel.dotWidth,
+    lineHeight = dottedLineUIModel.dotHeight,
+    space = dottedLineUIModel.space,
+    color = dottedLineUIModel.dotColor;
 
   @override
   Widget build(BuildContext context) {
@@ -44,5 +55,4 @@ class CustomDottedLine extends StatelessWidget {
       ),
     );
   }
-
 }

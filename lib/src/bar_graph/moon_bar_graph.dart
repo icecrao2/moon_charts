@@ -1,61 +1,112 @@
 
 
-part of bar_graph_library;
+import 'package:flutter/material.dart';
+import '../common/common_lib.dart';
 
 
 
-class BarChartWidget extends StatefulWidget {
+class MoonBarGraph extends StatefulWidget {
 
-  final List<ChartPointUIModel> chartPointGroup;
+  final List<MoonChartPointUIModel> chartPointGroup;
   final double maxY;
   final int hitXIndex;
   final Function(int) onChangeSelectedIndex;
+  final int yAxisCount;
+  final double barWidth;
+  final double barTouchAreaWidth;
+  final double itemBetweenPadding;
 
-  const BarChartWidget({
+  final Color selectedBarColor;
+  final Color unSelectedBarColor;
+
+  final double backgroundCardPadding;
+  final Duration animationDuration;
+  final BoxShadow backgroundBoxShadow;
+
+  final TextStyle unSelectedXAxisTextStyle;
+  final TextStyle selectedXAxisTextStyle;
+  final TextStyle yAxisTextStyle;
+  final MoonDottedLineUIModel dottedLineUIModel;
+
+
+  const MoonBarGraph({
     super.key,
     required this.chartPointGroup,
     required this.maxY,
     required this.hitXIndex,
-    required this.onChangeSelectedIndex
+    this.yAxisCount = 5,
+    this.backgroundCardPadding = 5,
+    this.animationDuration = const Duration(milliseconds: 500),
+    required this.onChangeSelectedIndex,
+    this.selectedBarColor = const Color.fromRGBO(89, 147, 255, 1),
+    this.unSelectedBarColor = const Color.fromRGBO(161, 161, 161, 1),
+    this.barWidth = 7,
+    this.barTouchAreaWidth = 27,
+    this.itemBetweenPadding = 10,
+
+    this.unSelectedXAxisTextStyle = const TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      color: Color.fromRGBO(81, 81, 81, 1),
+    ),
+    this.selectedXAxisTextStyle = const TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w600,
+      color: Color.fromRGBO(89, 147, 255, 1),
+    ),
+    this.yAxisTextStyle = const TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+      color: Color.fromRGBO(81, 81, 81, 1),
+    ),
+    this.dottedLineUIModel = const MoonDottedLineUIModel(
+      dotWidth: 1,
+      dotHeight: 6,
+      space: 4,
+      dotColor: Color.fromRGBO(89, 147, 255, 0.2),
+    ),
+    this.backgroundBoxShadow = const BoxShadow(
+        color: Color.fromRGBO(200, 200, 200, 0.5),
+        blurRadius: 5,
+        spreadRadius: 0.1,
+        offset: Offset(2, 2)
+    ),
   });
 
   @override
   State<StatefulWidget> createState() => _BarChartState();
 }
 
-class _BarChartState extends State<BarChartWidget> {
+class _BarChartState extends State<MoonBarGraph> {
 
   late double _widthMySelf;
   late double _heightMySelf;
-  double xCategoryFontSize = 11;
   final ScrollController _scrollController = ScrollController();
 
-  double get _itemBetweenPadding => 10;
-  double get _itemWidth => 28;
-  double get _itemBarWidth => 7;
-  int get _yAxisNumber => 5;
-  Duration get _animationDuration => const Duration(milliseconds: 500);
+  double get _itemBetweenPadding => widget.itemBetweenPadding;
+  double get _itemWidth => widget.barTouchAreaWidth;
+  double get _itemBarWidth => widget.barWidth;
+  int get _yAxisCount => widget.yAxisCount;
+  Duration get _animationDuration => widget.animationDuration;
 
 
   double get _graphWidth => _widthMySelf * 0.88181818;
   double get _graphHeight => _heightMySelf * 0.7556390;
 
   double get _scrollWidthMySelf => ((widget.chartPointGroup.length + 1) * (_itemWidth + _itemBetweenPadding));
-  double get _yAxisScale => widget.maxY / _yAxisNumber;
+  double get _yAxisScale => widget.maxY / _yAxisCount;
   double get _yAxisWidth => _widthMySelf * 0.106061;
-  double get _yAxisUnitHeight => _graphHeight / 5;
+  double get _yAxisUnitHeight => _graphHeight / _yAxisCount;
 
   double get _xAxisHeight => _heightMySelf * 0.086466;
 
   @override
-  void didUpdateWidget(covariant BarChartWidget oldWidget) {
+  void didUpdateWidget(covariant MoonBarGraph oldWidget) {
 
     if(oldWidget.chartPointGroup != widget.chartPointGroup ) {
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
       _scrollController.jumpTo(scrollPoint);
     }
-
-    // xCategoryFontSize = calculateFontSizeWithWidth(widget.chartPointGroup.last.x.isNotEmpty ? widget.chartPointGroup.last.x : "    " , _itemWidth, context) - 2;
 
     super.didUpdateWidget(oldWidget);
   }
@@ -63,15 +114,25 @@ class _BarChartState extends State<BarChartWidget> {
   @override
   Widget build(BuildContext context) {
 
-
     return  LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
 
           _widthMySelf = constraints.maxWidth;
           _heightMySelf = constraints.maxHeight;
 
-          return CardShapeContainer(
-            padding: const EdgeInsets.all(5),
+          return Container(
+            padding: EdgeInsets.all(widget.backgroundCardPadding),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: const Color.fromRGBO(223, 230, 238, 1),
+                  width: 1,
+                ),
+                boxShadow:[
+                  widget.backgroundBoxShadow
+                ]
+            ),
             child: Stack(
               children: [
                 SizedBox(
@@ -101,11 +162,7 @@ class _BarChartState extends State<BarChartWidget> {
                                 child: Text(
                                   widget.chartPointGroup[index].x,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: xCategoryFontSize,
-                                    fontWeight: widget.hitXIndex == index ? FontWeight.w600 : FontWeight.w500,
-                                    color: widget.hitXIndex == index ? Colors.blue : Colors.grey
-                                  ),
+                                  style: widget.hitXIndex == index ? widget.selectedXAxisTextStyle : widget.unSelectedXAxisTextStyle
                                 ),
                               )
                             ],
@@ -119,14 +176,11 @@ class _BarChartState extends State<BarChartWidget> {
                             children: [
                               for(int index = 0; index < widget.chartPointGroup.length; index++) Container(
                                 margin: EdgeInsets.only(right: _itemBetweenPadding),
-                                child: CustomDottedLine(
-                                    width: _itemWidth,
-                                    height: _graphHeight,
-                                    lineWidth: 1,
-                                    lineHeight: 6,
-                                    space: 4,
-                                    color: Colors.blue.withOpacity(0.15)
-                                ),
+                                child: MoonDottedLine.fromDottedLineUIModel(
+                                  width: _itemWidth,
+                                  height: _graphHeight,
+                                  dottedLineUIModel: widget.dottedLineUIModel
+                                )
                               )
                             ],
                           )
@@ -138,7 +192,7 @@ class _BarChartState extends State<BarChartWidget> {
                           child: Container(
                             width: widget.chartPointGroup.length * (_itemWidth + _itemBetweenPadding),
                             height: 1,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.black,
                             ),
                           )
@@ -161,11 +215,18 @@ class _BarChartState extends State<BarChartWidget> {
                                       width: _itemBarWidth,
                                       height: (_graphHeight / widget.maxY) * widget.chartPointGroup[index].y,
                                       decoration: BoxDecoration(
-                                          color: widget.hitXIndex == index ? Colors.blue : Colors.black,
+
+
+                                          color: widget.hitXIndex == index ? widget.selectedBarColor : widget.unSelectedBarColor,
+
+
                                           borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(10.0),
                                             topRight: Radius.circular(10.0),
                                           )
+
+
+
                                       ),
                                     ),
                                   )
@@ -173,6 +234,7 @@ class _BarChartState extends State<BarChartWidget> {
                             ],
                           )
                       ),
+
 
                       Positioned(
                           bottom: _xAxisHeight,
@@ -218,19 +280,17 @@ class _BarChartState extends State<BarChartWidget> {
                         verticalDirection: VerticalDirection.down,
                         children: [
 
-                          for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Container(
-                            width: _yAxisWidth,
-                            height: number.toStringAsFixed(1) == '0.0' ? 30 : _yAxisUnitHeight,
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              number.toStringAsFixed(1),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black
+                          for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Flexible(
+                            child: Container(
+                              width: _yAxisWidth,
+                              height: _yAxisUnitHeight,
+                              alignment: Alignment.topCenter,
+                              child: Text(
+                                number.toStringAsFixed(1),
+                                textAlign: TextAlign.center,
+                                style: widget.yAxisTextStyle
                               ),
-                            ),
+                            )
                           )
                         ],
                       ),
@@ -245,3 +305,6 @@ class _BarChartState extends State<BarChartWidget> {
     );
   }
 }
+
+
+
