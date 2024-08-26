@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import '../common/common_lib.dart';
+import '../ui_model/ui_model_lib.dart';
 
 
 
@@ -28,7 +29,6 @@ class MoonBarGraph extends StatefulWidget {
   final TextStyle yAxisTextStyle;
   final MoonDottedLineUIModel dottedLineUIModel;
 
-
   const MoonBarGraph({
     super.key,
     required this.chartPointGroup,
@@ -43,7 +43,6 @@ class MoonBarGraph extends StatefulWidget {
     this.barWidth = 7,
     this.barTouchAreaWidth = 27,
     this.itemBetweenPadding = 10,
-
     this.unSelectedXAxisTextStyle = const TextStyle(
       fontSize: 11,
       fontWeight: FontWeight.w500,
@@ -89,7 +88,6 @@ class _BarChartState extends State<MoonBarGraph> {
   int get _yAxisCount => widget.yAxisCount;
   Duration get _animationDuration => widget.animationDuration;
 
-
   double get _graphWidth => _widthMySelf * 0.88181818;
   double get _graphHeight => _heightMySelf * 0.7556390;
 
@@ -110,6 +108,7 @@ class _BarChartState extends State<MoonBarGraph> {
 
     super.didUpdateWidget(oldWidget);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -209,25 +208,16 @@ class _BarChartState extends State<MoonBarGraph> {
                                   margin: EdgeInsets.only(right: _itemBetweenPadding),
                                   padding: EdgeInsets.symmetric(horizontal: (_itemWidth - _itemBarWidth) / 2),
                                   alignment: Alignment.bottomCenter,
-                                  child: AnimatedSize(
+                                  child: AnimatedContainer(
                                     duration: _animationDuration,
-                                    child: Container(
-                                      width: _itemBarWidth,
-                                      height: (_graphHeight / widget.maxY) * widget.chartPointGroup[index].y,
-                                      decoration: BoxDecoration(
-
-
-                                          color: widget.hitXIndex == index ? widget.selectedBarColor : widget.unSelectedBarColor,
-
-
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10.0),
-                                            topRight: Radius.circular(10.0),
-                                          )
-
-
-
-                                      ),
+                                    width: _itemBarWidth,
+                                    height: (_graphHeight / widget.maxY) * widget.chartPointGroup[index].y,
+                                    decoration: BoxDecoration(
+                                        color: widget.hitXIndex == index ? widget.selectedBarColor : widget.unSelectedBarColor,
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10.0),
+                                          topRight: Radius.circular(10.0),
+                                        )
                                     ),
                                   )
                               )

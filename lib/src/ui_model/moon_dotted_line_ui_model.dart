@@ -1,6 +1,6 @@
 
 
-part of common_lib;
+part of ui_model_library;
 
 
 

@@ -31,6 +31,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  int _hitIndex = 10;
+
+  List<MoonChartPointUIModel> chartPointGroup = [
+    MoonChartPointUIModel(x: '0', y: 40),
+    MoonChartPointUIModel(x: '1', y: 20),
+    MoonChartPointUIModel(x: '2', y: 10),
+    MoonChartPointUIModel(x: '3', y: 40),
+    MoonChartPointUIModel(x: '0', y: 10),
+    MoonChartPointUIModel(x: '1', y: 20),
+    MoonChartPointUIModel(x: '2', y: 10),
+    MoonChartPointUIModel(x: '3', y: 40),
+    MoonChartPointUIModel(x: '0', y: 10),
+    MoonChartPointUIModel(x: '1', y: 20),
+    MoonChartPointUIModel(x: '2', y: 10),
+    MoonChartPointUIModel(x: '3', y: 40),
+    MoonChartPointUIModel(x: '0', y: 10),
+    MoonChartPointUIModel(x: '1', y: 20),
+    MoonChartPointUIModel(x: '2', y: 10),
+    MoonChartPointUIModel(x: '3', y: 40),
+  ];
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -39,37 +62,54 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Container(
-        width: 300,
-        height: 300,
-        alignment: Alignment.center,
-        child: MoonBarGraph(
-          chartPointGroup: [
-            MoonChartPointUIModel(x: '0', y: 1),
-            MoonChartPointUIModel(x: '1', y: 20),
-            MoonChartPointUIModel(x: '2', y: 10),
-            MoonChartPointUIModel(x: '3', y: 40),
-            MoonChartPointUIModel(x: '0', y: 10),
-            MoonChartPointUIModel(x: '1', y: 20),
-            MoonChartPointUIModel(x: '2', y: 10),
-            MoonChartPointUIModel(x: '3', y: 40),
-            MoonChartPointUIModel(x: '0', y: 10),
-            MoonChartPointUIModel(x: '1', y: 20),
-            MoonChartPointUIModel(x: '2', y: 10),
-            MoonChartPointUIModel(x: '3', y: 40),
-            MoonChartPointUIModel(x: '0', y: 10),
-            MoonChartPointUIModel(x: '1', y: 20),
-            MoonChartPointUIModel(x: '2', y: 10),
-            MoonChartPointUIModel(x: '3', y: 40),
-          ],
-          maxY: 60,
-          hitXIndex: 2,
-          yAxisCount: 5,
-          onChangeSelectedIndex: (index) {
+      body: Column(
+        children: [
+          Container(
+            width: 300,
+            height: 300,
+            alignment: Alignment.center,
+            child: MoonBarGraph(
+              chartPointGroup: chartPointGroup,
+              maxY: 60,
+              hitXIndex: _hitIndex,
+              yAxisCount: 5,
+              barTouchAreaWidth: 27,
+              itemBetweenPadding: 10,
+              onChangeSelectedIndex: (index) {
+                setState(() {
+                  _hitIndex = index;
+                });
+              },
+            ),
+          ),
 
-          }
-        ),
-      ),
+          Row(
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      chartPointGroup[0] = const MoonChartPointUIModel(x: '3', y: 10);
+                      chartPointGroup[1] = const MoonChartPointUIModel(x: '1', y: 40);
+                      _hitIndex = 9;
+                    });
+                  },
+                  child: Text('aa')
+              ),
+
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      chartPointGroup[0] = const MoonChartPointUIModel(x: '3', y: 40);
+                      chartPointGroup[1] = const MoonChartPointUIModel(x: '1', y: 10);
+                      _hitIndex = 9;
+                    });
+                  },
+                  child: Text('aa')
+              ),
+            ],
+          )
+        ],
+      )
 
     );
   }
