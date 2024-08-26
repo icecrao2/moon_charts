@@ -55,7 +55,7 @@ class _BarChartState extends State<BarChartWidget> {
       _scrollController.jumpTo(scrollPoint);
     }
 
-    xCategoryFontSize = calculateFontSizeWithWidth(widget.chartPointGroup.last.x.isNotEmpty ? widget.chartPointGroup.last.x : "    " , _itemWidth, context) - 2;
+    // xCategoryFontSize = calculateFontSizeWithWidth(widget.chartPointGroup.last.x.isNotEmpty ? widget.chartPointGroup.last.x : "    " , _itemWidth, context) - 2;
 
     super.didUpdateWidget(oldWidget);
   }
@@ -102,9 +102,9 @@ class _BarChartState extends State<BarChartWidget> {
                                   widget.chartPointGroup[index].x,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: xCategoryFontSize,
-                                      fontWeight: widget.hitXIndex == index ? FontWeight.w600 : FontWeight.w500,
-                                      color: widget.hitXIndex == index ? ColorResourceEnumUIModel.newBlue5.color : ColorResourceEnumUIModel.newGrey8.color
+                                    fontSize: xCategoryFontSize,
+                                    fontWeight: widget.hitXIndex == index ? FontWeight.w600 : FontWeight.w500,
+                                    color: widget.hitXIndex == index ? Colors.blue : Colors.grey
                                   ),
                                 ),
                               )
@@ -125,7 +125,7 @@ class _BarChartState extends State<BarChartWidget> {
                                     lineWidth: 1,
                                     lineHeight: 6,
                                     space: 4,
-                                    color: ColorResourceEnumUIModel.newBlue4.color.withOpacity(0.15)
+                                    color: Colors.blue.withOpacity(0.15)
                                 ),
                               )
                             ],
@@ -139,7 +139,7 @@ class _BarChartState extends State<BarChartWidget> {
                             width: widget.chartPointGroup.length * (_itemWidth + _itemBetweenPadding),
                             height: 1,
                             decoration: BoxDecoration(
-                              color: ColorResourceEnumUIModel.black1.color,
+                              color: Colors.black,
                             ),
                           )
                       ),
@@ -161,7 +161,7 @@ class _BarChartState extends State<BarChartWidget> {
                                       width: _itemBarWidth,
                                       height: (_graphHeight / widget.maxY) * widget.chartPointGroup[index].y,
                                       decoration: BoxDecoration(
-                                          color: widget.hitXIndex == index ? ColorResourceEnumUIModel.newBlue1.color : ColorResourceEnumUIModel.newBlue6.color,
+                                          color: widget.hitXIndex == index ? Colors.blue : Colors.black,
                                           borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(10.0),
                                             topRight: Radius.circular(10.0),
@@ -218,24 +218,19 @@ class _BarChartState extends State<BarChartWidget> {
                         verticalDirection: VerticalDirection.down,
                         children: [
 
-                          for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Column(
-                            children: [
-                              Text(
-                                number.toStringAsFixed(1),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorResourceEnumUIModel.black1.color
-                                ),
+                          for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Container(
+                            width: _yAxisWidth,
+                            height: number.toStringAsFixed(1) == '0.0' ? 30 : _yAxisUnitHeight,
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              number.toStringAsFixed(1),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black
                               ),
-                              if(number > 0.1) Container(
-                                width: _yAxisWidth,
-                                height: _yAxisUnitHeight / 2,
-                                alignment: Alignment.topCenter,
-                                child: const Text(''),
-                              )
-                            ],
+                            ),
                           )
                         ],
                       ),
