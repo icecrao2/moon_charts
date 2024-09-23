@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _hitIndex = 10;
 
   List<MoonChartPointUIModel> chartPointGroup = [
-    MoonChartPointUIModel(x: '0', y: 40),
+    MoonChartPointUIModel(x: '0', y: 100),
     MoonChartPointUIModel(x: '1', y: 20),
     MoonChartPointUIModel(x: '2', y: 10),
     MoonChartPointUIModel(x: '3', y: 40),

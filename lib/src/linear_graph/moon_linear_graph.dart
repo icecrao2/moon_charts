@@ -122,7 +122,7 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: widget.animationDuration
     );
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
     oldChartPointGroup = widget.chartPointGroup.map((e) => e).toList();
@@ -136,17 +136,17 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
     super.didUpdateWidget(oldWidget);
 
     if(!isEqual(oldChartPointGroup, widget.chartPointGroup) || oldWidget.chartPointGroup.isEmpty) {
-      _controller.forward(from: 0.0).then((value) {
-        oldChartPointGroup = oldWidget.chartPointGroup.map((e) => e).toList();
-      });
-    }
 
-    if(oldWidget.chartPointGroup.isEmpty || oldWidget.chartPointGroup != widget.chartPointGroup) {
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
       _scrollController.jumpTo(scrollPoint);
+
+      _controller.forward(from: 0.0);
+
+      Future.delayed(widget.animationDuration).then((value) {
+        oldChartPointGroup = widget.chartPointGroup.map((e) => e).toList();
+      });
     }
   }
-
 
   bool isEqual(List<MoonChartPointUIModel> list1, List<MoonChartPointUIModel> list2) {
     if (list1.length != list2.length) {
@@ -229,7 +229,7 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                     ),
 
                     Positioned(
-                        bottom: _xAxisHeight,
+                        bottom: _xAxisHeight - widget.backgroundCardPadding.bottom,
                         left: _yAxisWidth,
                         child: Row(
                           children: [
