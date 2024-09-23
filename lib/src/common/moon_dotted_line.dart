@@ -22,7 +22,7 @@ class MoonDottedLine extends StatelessWidget {
     required this.lineWidth,
     required this.lineHeight,
     required this.space,
-    required this.color
+    required this.color,
   });
 
   MoonDottedLine.fromDottedLineUIModel({

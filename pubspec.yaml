@@ -1,6 +1,6 @@
 name: moon_graphs
 description: "moon graphs package"
-version: 0.0.1
+version: 1.0.0
 homepage: "https://github.com/icecrao2/moon_graphs"
 repository: "https://github.com/icecrao2/moon_graphs"
 
@@ -17,6 +17,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+
+
+platforms:
+  android:
+  ios:
 
 
 flutter:

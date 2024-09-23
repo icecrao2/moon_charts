@@ -19,8 +19,7 @@ class MoonBarGraph extends StatefulWidget {
 
   final Color selectedBarColor;
   final Color unSelectedBarColor;
-
-  final double backgroundCardPadding;
+  final EdgeInsets backgroundCardPadding;
   final Duration animationDuration;
   final BoxShadow backgroundBoxShadow;
 
@@ -36,7 +35,7 @@ class MoonBarGraph extends StatefulWidget {
     required this.hitXIndex,
     required this.onChangeSelectedIndex,
     this.yAxisCount = 5,
-    this.backgroundCardPadding = 5,
+    this.backgroundCardPadding = const EdgeInsets.all(5),
     this.animationDuration = const Duration(milliseconds: 500),
     this.selectedBarColor = const Color.fromRGBO(89, 147, 255, 1),
     this.unSelectedBarColor = const Color.fromRGBO(161, 161, 161, 1),
@@ -120,7 +119,7 @@ class _BarChartState extends State<MoonBarGraph> {
           _heightMySelf = constraints.maxHeight;
 
           return Container(
-            padding: EdgeInsets.all(widget.backgroundCardPadding),
+            padding: widget.backgroundCardPadding,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
@@ -259,28 +258,25 @@ class _BarChartState extends State<MoonBarGraph> {
 
 
                 Positioned(
-                    bottom: 0,
+                    bottom: _xAxisHeight,
                     left: 0,
                     child: Container(
                       color: Colors.white,
                       height: _heightMySelf,
-                      padding: EdgeInsets.only(top: _heightMySelf - _graphHeight - _xAxisHeight - 5),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         verticalDirection: VerticalDirection.down,
                         children: [
 
-                          for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Flexible(
-                            child: Container(
-                              width: _yAxisWidth,
-                              height: _yAxisUnitHeight,
-                              alignment: Alignment.topCenter,
-                              child: Text(
+                          for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Container(
+                            width: _yAxisWidth,
+                            height: _yAxisUnitHeight,
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
                                 number.toStringAsFixed(1),
                                 textAlign: TextAlign.center,
                                 style: widget.yAxisTextStyle
-                              ),
-                            )
+                            ),
                           )
                         ],
                       ),
