@@ -25,6 +25,7 @@ class MoonLinearGraph extends StatefulWidget {
   final Duration animationDuration;
   final BoxShadow backgroundBoxShadow;
 
+  final String legend;
   final int xAxisLabelPrecision;
   final String xAxisLabelSuffixUnit;
   final TextStyle unSelectedXAxisTextStyle;
@@ -39,6 +40,7 @@ class MoonLinearGraph extends StatefulWidget {
     required this.maxY,
     required this.hitXIndex,
     required this.onChangeSelectedIndex,
+    this.legend = "",
     this.xAxisLabelPrecision = 1,
     this.xAxisLabelSuffixUnit = "",
     this.yAxisCount = 5,
@@ -244,6 +246,26 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                     ),
 
                     Positioned(
+                        top: widget.backgroundCardPadding.top,
+                        left: _yAxisWidth,
+                        child: Row(
+                          children: [
+                            for(int index = 0; index < widget.chartPointGroup.length; index++) SizedBox(
+                              width: _itemWidth + _itemBetweenPadding,
+                              child: Text(
+                                widget.hitXIndex == index ? widget.chartPointGroup[index].y.toStringAsFixed(2) : "",
+                                style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+
+
+                    Positioned(
                         bottom: _xAxisHeight - 1,
                         left: _yAxisWidth,
                         child: Container(
@@ -255,18 +277,14 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                         )
                     ),
 
-
-
                     Positioned(
                         bottom: _xAxisHeight,
                         left: _yAxisWidth + _itemBetweenPadding + (_itemBarWidth / 2),
                         child: CustomPaint(
-                          size: Size(_scrollWidthMySelf - _itemWidth - _itemBetweenPadding, _heightMySelf),
+                          size: Size(_scrollWidthMySelf - _itemWidth - _itemBetweenPadding, _graphHeight),
                           painter: _MoonLinearGraphPainter(nodeGroup: widget.chartPointGroup, oldNodeGroup: oldChartPointGroup, animation: _animation),
                         )
                     ),
-
-
 
                     Positioned(
                         bottom: _xAxisHeight,
@@ -301,6 +319,16 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
               ),
 
               Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: Container(
+                    width: _yAxisWidth,
+                    height: _heightMySelf,
+                    color: Colors.white,
+                  )
+              ),
+
+              Positioned(
                   bottom: _xAxisHeight,
                   left: 0,
                   child: Container(
@@ -325,6 +353,19 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                     ),
                   )
               ),
+
+
+              Positioned(
+                  top: widget.backgroundCardPadding.top / 2,
+                  left: widget.backgroundCardPadding.left / 2,
+                  child: Text(
+                    widget.legend,
+                    style: const TextStyle(
+                      fontSize: 10,
+                    ),
+                  )
+              ),
+
             ],
           ),
         );

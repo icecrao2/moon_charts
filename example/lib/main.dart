@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     MoonChartPointUIModel(x: '1', y: 20),
     MoonChartPointUIModel(x: '2', y: 10),
     MoonChartPointUIModel(x: '3', y: 40),
-    MoonChartPointUIModel(x: '0', y: 10),
+    MoonChartPointUIModel(x: '0', y: 100),
     MoonChartPointUIModel(x: '1', y: 20),
     MoonChartPointUIModel(x: '2', y: 10),
     MoonChartPointUIModel(x: '3', y: 40),
@@ -88,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBetweenPadding: 10,
               xAxisLabelPrecision: 0,
               xAxisLabelSuffixUnit: "%",
+              legend: "FEV1%",
               unSelectedXAxisTextStyle: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
@@ -175,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //     ),
           //   ),
           // ),
-          //
+
           Row(
             children: [
               ElevatedButton(
