@@ -86,6 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
               barWidth: 7,
               barTouchAreaWidth: 27,
               itemBetweenPadding: 10,
+              xAxisLabelPrecision: 0,
+              xAxisLabelSuffixUnit: "%",
               unSelectedXAxisTextStyle: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
@@ -106,6 +108,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   dotHeight: 6,
                   space: 0,
                   dotColor: Colors.blue.withOpacity(0.5)
+              ),
+              selectedDottedLineUIModel: MoonDottedLineUIModel(
+                  dotWidth: 2,
+                  dotHeight: 6,
+                  space: 0,
+                  dotColor: Colors.blue.withOpacity(1)
               ),
               backgroundBoxShadow: const BoxShadow(
                   color: Color.fromRGBO(200, 200, 200, 0.5),

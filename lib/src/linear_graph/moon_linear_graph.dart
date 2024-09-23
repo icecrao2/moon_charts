@@ -25,10 +25,13 @@ class MoonLinearGraph extends StatefulWidget {
   final Duration animationDuration;
   final BoxShadow backgroundBoxShadow;
 
+  final int xAxisLabelPrecision;
+  final String xAxisLabelSuffixUnit;
   final TextStyle unSelectedXAxisTextStyle;
   final TextStyle selectedXAxisTextStyle;
   final TextStyle yAxisTextStyle;
   final MoonDottedLineUIModel dottedLineUIModel;
+  final MoonDottedLineUIModel selectedDottedLineUIModel;
 
   const MoonLinearGraph({
     super.key,
@@ -36,6 +39,8 @@ class MoonLinearGraph extends StatefulWidget {
     required this.maxY,
     required this.hitXIndex,
     required this.onChangeSelectedIndex,
+    this.xAxisLabelPrecision = 1,
+    this.xAxisLabelSuffixUnit = "",
     this.yAxisCount = 5,
     this.backgroundCardPadding = const EdgeInsets.all(5),
     this.animationDuration = const Duration(milliseconds: 500),
@@ -60,6 +65,12 @@ class MoonLinearGraph extends StatefulWidget {
       color: Color.fromRGBO(81, 81, 81, 1),
     ),
     this.dottedLineUIModel = const MoonDottedLineUIModel(
+      dotWidth: 1,
+      dotHeight: 6,
+      space: 4,
+      dotColor: Color.fromRGBO(89, 147, 255, 0.2),
+    ),
+    this.selectedDottedLineUIModel = const MoonDottedLineUIModel(
       dotWidth: 1,
       dotHeight: 6,
       space: 4,
@@ -225,7 +236,7 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                                 child: MoonDottedLine.fromDottedLineUIModel(
                                   width: _itemWidth,
                                   height: _graphHeight,
-                                  dottedLineUIModel: widget.dottedLineUIModel
+                                  dottedLineUIModel: widget.hitXIndex == index ? widget.selectedDottedLineUIModel : widget.dottedLineUIModel
                                 )
                             )
                           ],
@@ -305,7 +316,7 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                           height: _yAxisUnitHeight,
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            number.toStringAsFixed(1),
+                            "${number.toStringAsFixed(widget.xAxisLabelPrecision)}${widget.xAxisLabelSuffixUnit}",
                             textAlign: TextAlign.center,
                             style: widget.yAxisTextStyle
                           ),
