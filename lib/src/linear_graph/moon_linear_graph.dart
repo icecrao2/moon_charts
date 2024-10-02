@@ -1,6 +1,5 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../moon_graphs.dart';
@@ -105,7 +104,6 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
   double get _itemWidth => widget.barTouchAreaWidth;
   double get _itemBarWidth => widget.barWidth;
   int get _yAxisCount => widget.yAxisCount;
-  Duration get _animationDuration => widget.animationDuration;
 
   double get _graphWidth => _widthMySelf * 0.88181818;
   double get _graphHeight => _heightMySelf * 0.7556390;
@@ -161,14 +159,11 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
     return true; // 모든 요소가 같으면 같음
   }
 
-
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
