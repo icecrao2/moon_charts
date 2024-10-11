@@ -4,6 +4,7 @@ library moon_linear_graph_library;
 
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/rendering.dart';
 import 'dart:math' as math;
 
 import '../../moon_graphs.dart';

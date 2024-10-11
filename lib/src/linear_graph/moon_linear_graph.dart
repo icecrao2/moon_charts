@@ -114,18 +114,10 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
   late int hitXIndex;
 
-  late _MoonLinearGraphLegend _legendWidget;
-  late _MoonLinearGraphYLabel _yLabelWidget;
-  late _MoonLinearGraphTouchArea _touchAreaWidget;
-  late _MoonLinearGraphYAxisGroup _yAxisGroupWidget;
-  late _MoonLinearGraphXLabel _xLabelWidget;
-
   @override
   void initState() {
 
     hitXIndex = widget.hitXIndex;
-
-    _legendWidget = _MoonLinearGraphLegend(widget.legend);
 
     _controller = AnimationController(
       vsync: this,
@@ -145,6 +137,7 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
     super.didUpdateWidget(oldWidget);
 
+
     if (widget.hitXIndex != hitXIndex) {
       hitXIndex = widget.hitXIndex;
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
@@ -157,7 +150,6 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
       if(_controller.isAnimating) {
         _controller.stop();
       }
-
       _controller.forward(from: 0.0);
     }
   }
@@ -181,51 +173,8 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
 
-        bool needsRebuild = constraints.maxHeight != _heightMySelf || constraints.maxWidth != _widthMySelf;
-
-        if(needsRebuild) {
-
-          _widthMySelf = constraints.maxWidth;
-          _heightMySelf = constraints.maxHeight;
-
-          _yLabelWidget = _MoonLinearGraphYLabel(
-              height: _heightMySelf, maxY: widget.maxY,
-              yAxisScale: _yAxisScale, yAxisWidth: _yAxisWidth,
-              yAxisUnitHeight: _yAxisUnitHeight, xAxisLabelPrecision: widget.xAxisLabelPrecision,
-              xAxisLabelSuffixUnit: widget.xAxisLabelSuffixUnit, textStyle: widget.yAxisTextStyle
-          );
-
-          _touchAreaWidget = _MoonLinearGraphTouchArea(
-              tapAreaCount: widget.chartPointGroup.length, tapAreaWidth: _itemWidth,
-              tapAreaHeight: _graphHeight, padding: EdgeInsets.only(right: _itemBetweenPadding),
-              onPressed: (index) {
-                if(hitXIndex != index) {
-                  setState(() {
-                    hitXIndex = index;
-                    widget.onChangeSelectedIndex(index);
-                  });
-                }
-              }
-          );
-
-          _yAxisGroupWidget = _MoonLinearGraphYAxisGroup(
-              axisCount: widget.chartPointGroup.length,
-              padding: EdgeInsets.only(right: _itemBetweenPadding),
-              axisWidth: _itemWidth,
-              axisHeight: _graphHeight,
-              line: widget.dottedLineUIModel
-          );
-
-          _xLabelWidget = _MoonLinearGraphXLabel(
-              chartPointGroup: widget.chartPointGroup,
-              labelWidth: _itemWidth,
-              labelMargin: EdgeInsets.only(right: _itemBetweenPadding),
-              hitXIndex: hitXIndex,
-              selectedXLabelTextStyle: widget.selectedXAxisTextStyle,
-              unSelectedXLabelTextStyle: widget.unSelectedXAxisTextStyle
-          );
-        }
-
+        _widthMySelf = constraints.maxWidth;
+        _heightMySelf = constraints.maxHeight;
 
         return Container(
           padding: widget.backgroundCardPadding,
@@ -256,13 +205,26 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                     Positioned(
                       bottom: 0,
                       left: _yAxisWidth,
-                      child: _xLabelWidget
+                      child:  _MoonLinearGraphXLabel(
+                        chartPointGroup: widget.chartPointGroup,
+                        labelWidth: _itemWidth,
+                        labelMargin: EdgeInsets.only(right: _itemBetweenPadding),
+                        hitXIndex: hitXIndex,
+                        selectedXLabelTextStyle: widget.selectedXAxisTextStyle,
+                        unSelectedXLabelTextStyle: widget.unSelectedXAxisTextStyle
+                      )
                     ),
 
                     Positioned(
                       bottom: _xAxisHeight - widget.backgroundCardPadding.bottom,
                       left: _yAxisWidth,
-                      child: _yAxisGroupWidget
+                      child: _MoonLinearGraphYAxisGroup(
+                          axisCount: widget.chartPointGroup.length,
+                          padding: EdgeInsets.only(right: _itemBetweenPadding),
+                          axisWidth: _itemWidth,
+                          axisHeight: _graphHeight,
+                          line: widget.dottedLineUIModel
+                      ),
                     ),
 
                     Positioned(
@@ -312,9 +274,20 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                     ),
 
                     Positioned(
-                        bottom: _xAxisHeight,
-                        left: _yAxisWidth,
-                        child: _touchAreaWidget
+                      bottom: _xAxisHeight,
+                      left: _yAxisWidth,
+                      child: _MoonLinearGraphTouchArea(
+                        tapAreaCount: widget.chartPointGroup.length, tapAreaWidth: _itemWidth,
+                        tapAreaHeight: _graphHeight, padding: EdgeInsets.only(right: _itemBetweenPadding),
+                        onPressed: (index) {
+                          if(hitXIndex != index) {
+                            setState(() {
+                              hitXIndex = index;
+                              widget.onChangeSelectedIndex(index);
+                            });
+                          }
+                        }
+                      )
                     ),
                   ],
                 ),
@@ -323,13 +296,18 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
               Positioned(
                 bottom: _xAxisHeight,
                 left: 0,
-                child: _yLabelWidget
+                child: _MoonLinearGraphYLabel(
+                    height: _heightMySelf, maxY: widget.maxY,
+                    yAxisScale: _yAxisScale, yAxisWidth: _yAxisWidth,
+                    yAxisUnitHeight: _yAxisUnitHeight, xAxisLabelPrecision: widget.xAxisLabelPrecision,
+                    xAxisLabelSuffixUnit: widget.xAxisLabelSuffixUnit, textStyle: widget.yAxisTextStyle
+                )
               ),
 
               Positioned(
-                  top: widget.backgroundCardPadding.top / 2,
-                  left: widget.backgroundCardPadding.left / 2,
-                  child: _legendWidget,
+                top: widget.backgroundCardPadding.top / 2,
+                left: widget.backgroundCardPadding.left / 2,
+                child: _MoonLinearGraphLegend(widget.legend),
               ),
             ],
           ),

@@ -1,10 +1,10 @@
 
 
-part of moon_linear_graph_library;
+part of moon_bar_graph_library;
 
 
 
-class _MoonLinearGraphYLabel extends StatelessWidget {
+class _MoonBarGraphYLabel extends StatelessWidget {
 
   final double height;
   final double maxY;
@@ -15,7 +15,7 @@ class _MoonLinearGraphYLabel extends StatelessWidget {
   final String xAxisLabelSuffixUnit;
   final TextStyle textStyle;
 
-  const _MoonLinearGraphYLabel({
+  const _MoonBarGraphYLabel({
     required this.height,
     required this.maxY,
     required this.yAxisScale,
@@ -28,6 +28,8 @@ class _MoonLinearGraphYLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    debugPrint('rebuild y label');
 
     return Container(
       color: Colors.white,
@@ -50,7 +52,7 @@ class _MoonLinearGraphYLabel extends StatelessWidget {
             ),
           );
         }),
-      )
+      ),
     );
   }
 }

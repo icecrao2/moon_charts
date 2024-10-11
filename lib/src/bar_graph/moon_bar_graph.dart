@@ -1,8 +1,6 @@
 
 
-import 'package:flutter/material.dart';
-import '../common/common_lib.dart';
-import '../ui_model/ui_model_lib.dart';
+part of moon_bar_graph_library;
 
 
 
@@ -77,8 +75,8 @@ class MoonBarGraph extends StatefulWidget {
 
 class _BarChartState extends State<MoonBarGraph> {
 
-  late double _widthMySelf;
-  late double _heightMySelf;
+  double _widthMySelf = 0;
+  double _heightMySelf = 0;
   final ScrollController _scrollController = ScrollController();
 
   double get _itemBetweenPadding => widget.itemBetweenPadding;
@@ -96,6 +94,18 @@ class _BarChartState extends State<MoonBarGraph> {
   double get _yAxisUnitHeight => _graphHeight / _yAxisCount;
 
   double get _xAxisHeight => _heightMySelf * 0.086466;
+
+
+  late _MoonBarGraphYLabel _yLabelWidget;
+  late _MoonBarGraphTouchArea _touchAreaWidget;
+
+
+
+
+
+
+
+
 
   @override
   void didUpdateWidget(covariant MoonBarGraph oldWidget) {
@@ -115,8 +125,36 @@ class _BarChartState extends State<MoonBarGraph> {
     return  LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
 
-          _widthMySelf = constraints.maxWidth;
-          _heightMySelf = constraints.maxHeight;
+          bool needsRebuild = constraints.maxHeight != _heightMySelf || constraints.maxWidth != _widthMySelf;
+
+          if(needsRebuild) {
+
+            _widthMySelf = constraints.maxWidth;
+            _heightMySelf = constraints.maxHeight;
+
+            _yLabelWidget = _MoonBarGraphYLabel(
+                height: _heightMySelf, maxY: widget.maxY,
+                yAxisScale: _yAxisScale, yAxisWidth: _yAxisWidth,
+                yAxisUnitHeight: _yAxisUnitHeight, xAxisLabelPrecision: 1,
+                xAxisLabelSuffixUnit: "", textStyle: widget.yAxisTextStyle
+            );
+
+            _touchAreaWidget = _MoonBarGraphTouchArea(
+              tapAreaCount: widget.chartPointGroup.length,
+              tapAreaWidth: _itemWidth,
+              tapAreaHeight: _graphHeight,
+              padding: EdgeInsets.only(right: _itemBetweenPadding),
+              onPressed: (index) {
+                setState(() {
+                  widget.onChangeSelectedIndex(index);
+                });
+              },
+            );
+
+          }
+
+
+
 
           return Container(
             padding: widget.backgroundCardPadding,
@@ -197,90 +235,46 @@ class _BarChartState extends State<MoonBarGraph> {
                       ),
 
                       Positioned(
-                          bottom: _xAxisHeight,
-                          left: _yAxisWidth,
-                          child: Row(
-                            children: [
-                              for(int index = 0; index < widget.chartPointGroup.length; index++) Container(
-                                  width: _itemWidth,
-                                  height: _graphHeight,
-                                  margin: EdgeInsets.only(right: _itemBetweenPadding),
-                                  padding: EdgeInsets.symmetric(horizontal: (_itemWidth - _itemBarWidth) / 2),
-                                  alignment: Alignment.bottomCenter,
-                                  child: AnimatedContainer(
-                                    duration: _animationDuration,
-                                    width: _itemBarWidth,
-                                    height: (_graphHeight / widget.maxY) * widget.chartPointGroup[index].y,
-                                    decoration: BoxDecoration(
-                                        color: widget.hitXIndex == index ? widget.selectedBarColor : widget.unSelectedBarColor,
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(10.0),
-                                          topRight: Radius.circular(10.0),
-                                        )
-                                    ),
+                        bottom: _xAxisHeight,
+                        left: _yAxisWidth,
+                        child: Row(
+                          children: [
+                            for(int index = 0; index < widget.chartPointGroup.length; index++) Container(
+                              width: _itemWidth,
+                              height: _graphHeight,
+                              margin: EdgeInsets.only(right: _itemBetweenPadding),
+                              padding: EdgeInsets.symmetric(horizontal: (_itemWidth - _itemBarWidth) / 2),
+                              alignment: Alignment.bottomCenter,
+                              child: AnimatedContainer(
+                                duration: _animationDuration,
+                                width: _itemBarWidth,
+                                height: (_graphHeight / widget.maxY) * widget.chartPointGroup[index].y,
+                                decoration: BoxDecoration(
+                                  color: widget.hitXIndex == index ? widget.selectedBarColor : widget.unSelectedBarColor,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10.0),
+                                    topRight: Radius.circular(10.0),
                                   )
-                              )
-                            ],
-                          )
-                      ),
-
-
-                      Positioned(
-                          bottom: _xAxisHeight,
-                          left: _yAxisWidth,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-
-                              for(int index = 0; index < widget.chartPointGroup.length; index++) Container(
-                                width: _itemWidth,
-                                height: _graphHeight,
-                                margin: EdgeInsets.only(right: _itemBetweenPadding),
-                                child: OutlinedButton(
-                                    onPressed: () {
-                                      widget.onChangeSelectedIndex(index);
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      side: const BorderSide(color: Colors.transparent),
-                                      shape: const RoundedRectangleBorder(),
-                                      splashFactory: InkSplash.splashFactory,
-                                    ),
-                                    child: Container()
                                 ),
                               )
-                            ],
-                          )
+                            )
+                          ],
+                        )
+                      ),
+
+                      Positioned(
+                        bottom: _xAxisHeight,
+                        left: _yAxisWidth,
+                        child: _touchAreaWidget
                       ),
                     ],
                   ),
                 ),
 
-
                 Positioned(
                   bottom: _xAxisHeight,
                   left: 0,
-                  child: Container(
-                    color: Colors.white,
-                    height: _heightMySelf,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      verticalDirection: VerticalDirection.down,
-                      children: [
-
-                        for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Container(
-                          width: _yAxisWidth,
-                          height: _yAxisUnitHeight,
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                              number.toStringAsFixed(1),
-                              textAlign: TextAlign.center,
-                              style: widget.yAxisTextStyle
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+                  child: _yLabelWidget
                 ),
               ],
             ),
@@ -289,6 +283,3 @@ class _BarChartState extends State<MoonBarGraph> {
     );
   }
 }
-
-
-
