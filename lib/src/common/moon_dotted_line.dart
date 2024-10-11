@@ -13,7 +13,7 @@ class MoonDottedLine extends StatelessWidget {
   final double space;
   final Color color;
 
-  double get numberOfDot => height / (lineHeight + space) - 1;
+  double get numberOfDot => (height / (lineHeight + space)).floor().toDouble();
 
   const MoonDottedLine({
     super.key,
@@ -42,16 +42,15 @@ class MoonDottedLine extends StatelessWidget {
     return SizedBox(
       width: width,
       height: height,
-      child: Flex(
-        direction: Axis.vertical,
-        children: [
-          for(int i = 0 ; i < numberOfDot ; i++) Container(
+      child: Column(
+        children: List.generate(numberOfDot.toInt(), (index) {
+          return Container(
             margin: EdgeInsets.symmetric(vertical: space / 2),
             color: color,
             width: lineWidth,
             height: lineHeight,
-          )
-        ],
+          );
+        })
       ),
     );
   }

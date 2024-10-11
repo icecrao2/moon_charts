@@ -15,8 +15,6 @@ class _MoonLinearGraphLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
 
-    debugPrint('line repaint');
-
     Paint paint = Paint()
       ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke
@@ -56,8 +54,8 @@ class _MoonLinearGraphLinePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return !const ListEquality().equals(oldNodeGroup, nodeGroup);
+  bool shouldRepaint(covariant _MoonLinearGraphLinePainter oldDelegate) {
+    return !const ListEquality().equals(oldNodeGroup, nodeGroup) || oldDelegate.animation != animation;
   }
 }
 

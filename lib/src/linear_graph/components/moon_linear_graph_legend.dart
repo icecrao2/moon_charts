@@ -13,8 +13,6 @@ class _MoonLinearGraphLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint('rebuild legend');
-
     return Text(
       _legend,
       style: const TextStyle(

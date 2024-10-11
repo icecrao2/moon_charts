@@ -23,8 +23,6 @@ class _MoonLinearGraphYAxisGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint('rebuild y axis group');
-
     return Row(
       children: List.generate(axisCount, (index) {
         return Padding(

@@ -134,6 +134,9 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
     oldChartPointGroup = widget.chartPointGroup.map((e) => e).toList();
 
+    _controller.addStatusListener(_statusListener);
+
+
     super.initState();
   }
 
@@ -142,31 +145,38 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
     super.didUpdateWidget(oldWidget);
 
-    hitXIndex = widget.hitXIndex;
+    if (widget.hitXIndex != hitXIndex) {
+      hitXIndex = widget.hitXIndex;
+      double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
+      scrollPoint = scrollPoint.clamp(0.0, _scrollController.position.maxScrollExtent);
+      _scrollController.jumpTo(scrollPoint);
+    }
 
     if(!const ListEquality().equals(oldChartPointGroup, widget.chartPointGroup) || oldWidget.chartPointGroup.isEmpty) {
 
-      double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
-      _scrollController.jumpTo(scrollPoint);
+      if(_controller.isAnimating) {
+        _controller.stop();
+      }
 
       _controller.forward(from: 0.0);
-
-      Future.delayed(widget.animationDuration).then((value) {
-        oldChartPointGroup = widget.chartPointGroup.map((e) => e).toList();
-      });
     }
   }
 
-
   @override
   void dispose() {
+    _controller.removeStatusListener(_statusListener);
     _controller.dispose();
     super.dispose();
   }
 
+  void _statusListener(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      oldChartPointGroup = widget.chartPointGroup.map((e) => e).toList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {

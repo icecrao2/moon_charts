@@ -23,8 +23,6 @@ class _MoonLinearGraphTouchArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint('rebuild touch area');
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children:List.generate(tapAreaCount, (index) {

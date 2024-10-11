@@ -25,8 +25,6 @@ class _MoonLinearGraphXLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint('rebuild x label');
-
     return Row(
       children: List.generate(chartPointGroup.length, (index) {
         return Container(

@@ -29,8 +29,6 @@ class _MoonLinearGraphYLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint('rebuild y label');
-
     return Container(
       color: Colors.white,
       height: height,
