@@ -114,20 +114,11 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
   late int hitXIndex;
 
-
-
-
   late _MoonLinearGraphLegend _legendWidget;
   late _MoonLinearGraphYLabel _yLabelWidget;
   late _MoonLinearGraphTouchArea _touchAreaWidget;
   late _MoonLinearGraphYAxisGroup _yAxisGroupWidget;
   late _MoonLinearGraphXLabel _xLabelWidget;
-
-
-
-
-
-
 
   @override
   void initState() {
@@ -153,7 +144,7 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
     hitXIndex = widget.hitXIndex;
 
-    if(!isEqual(oldChartPointGroup, widget.chartPointGroup) || oldWidget.chartPointGroup.isEmpty) {
+    if(!const ListEquality().equals(oldChartPointGroup, widget.chartPointGroup) || oldWidget.chartPointGroup.isEmpty) {
 
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
       _scrollController.jumpTo(scrollPoint);
@@ -180,7 +171,9 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
 
-        if(constraints.maxHeight != _heightMySelf || constraints.maxWidth != _widthMySelf) {
+        bool needsRebuild = constraints.maxHeight != _heightMySelf || constraints.maxWidth != _widthMySelf;
+
+        if(needsRebuild) {
 
           _widthMySelf = constraints.maxWidth;
           _heightMySelf = constraints.maxHeight;
@@ -196,10 +189,12 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
               tapAreaCount: widget.chartPointGroup.length, tapAreaWidth: _itemWidth,
               tapAreaHeight: _graphHeight, padding: EdgeInsets.only(right: _itemBetweenPadding),
               onPressed: (index) {
-                setState(() {
-                  hitXIndex = index;
-                  widget.onChangeSelectedIndex(index);
-                });
+                if(hitXIndex != index) {
+                  setState(() {
+                    hitXIndex = index;
+                    widget.onChangeSelectedIndex(index);
+                  });
+                }
               }
           );
 

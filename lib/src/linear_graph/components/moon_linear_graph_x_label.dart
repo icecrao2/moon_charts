@@ -28,18 +28,18 @@ class _MoonLinearGraphXLabel extends StatelessWidget {
     debugPrint('rebuild x label');
 
     return Row(
-      children: [
-        for(int index = 0; index < chartPointGroup.length; index++) Container(
+      children: List.generate(chartPointGroup.length, (index) {
+        return Container(
           width: labelWidth,
           margin: labelMargin,
           alignment: Alignment.center,
           child: Text(
-              chartPointGroup[index].x,
-              textAlign: TextAlign.center,
-              style: hitXIndex == index ? selectedXLabelTextStyle : unSelectedXLabelTextStyle
+            chartPointGroup[index].x,
+            textAlign: TextAlign.center,
+            style: hitXIndex == index ? selectedXLabelTextStyle : unSelectedXLabelTextStyle
           ),
-        )
-      ],
+        );
+      })
     );
   }
 }

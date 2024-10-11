@@ -37,21 +37,21 @@ class _MoonLinearGraphYLabel extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         verticalDirection: VerticalDirection.down,
-        children: [
-
-          for(double number = maxY; number >= 0; number -= yAxisScale) SizedBox(
-              width: yAxisWidth,
-              height: yAxisUnitHeight,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                    "${number.toStringAsFixed(xAxisLabelPrecision)}$xAxisLabelSuffixUnit",
-                    textAlign: TextAlign.center,
-                    style: textStyle
-                ),
-              )
-          )
-        ],
+        children: List.generate((maxY / yAxisScale).ceil() + 1, (index) {
+          final double number = maxY - index * yAxisScale;
+          return SizedBox(
+            width: yAxisWidth,
+            height: yAxisUnitHeight,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                "${number.toStringAsFixed(xAxisLabelPrecision)}$xAxisLabelSuffixUnit",
+                textAlign: TextAlign.center,
+                style: textStyle,
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

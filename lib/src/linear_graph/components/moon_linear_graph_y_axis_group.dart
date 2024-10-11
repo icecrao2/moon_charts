@@ -26,16 +26,16 @@ class _MoonLinearGraphYAxisGroup extends StatelessWidget {
     debugPrint('rebuild y axis group');
 
     return Row(
-      children: [
-        for(int index = 0; index < axisCount; index++) Padding(
-            padding: padding,
-            child: MoonDottedLine.fromDottedLineUIModel(
-                width: axisWidth,
-                height: axisHeight,
-                dottedLineUIModel: line
-            )
-        )
-      ],
+      children: List.generate(axisCount, (index) {
+        return Padding(
+          padding: padding,
+          child: MoonDottedLine.fromDottedLineUIModel(
+            width: axisWidth,
+            height: axisHeight,
+            dottedLineUIModel: line
+          )
+        );
+      })
     );
   }
 }

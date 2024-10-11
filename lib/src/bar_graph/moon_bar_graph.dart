@@ -258,32 +258,30 @@ class _BarChartState extends State<MoonBarGraph> {
 
 
                 Positioned(
-                    bottom: _xAxisHeight,
-                    left: 0,
-                    child: Container(
-                      color: Colors.white,
-                      height: _heightMySelf,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        verticalDirection: VerticalDirection.down,
-                        children: [
+                  bottom: _xAxisHeight,
+                  left: 0,
+                  child: Container(
+                    color: Colors.white,
+                    height: _heightMySelf,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      verticalDirection: VerticalDirection.down,
+                      children: [
 
-                          for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Container(
-                            width: _yAxisWidth,
-                            height: _yAxisUnitHeight,
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                                number.toStringAsFixed(1),
-                                textAlign: TextAlign.center,
-                                style: widget.yAxisTextStyle
-                            ),
-                          )
-                        ],
-                      ),
-                    )
+                        for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Container(
+                          width: _yAxisWidth,
+                          height: _yAxisUnitHeight,
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                              number.toStringAsFixed(1),
+                              textAlign: TextAlign.center,
+                              style: widget.yAxisTextStyle
+                          ),
+                        )
+                      ],
+                    ),
+                  )
                 ),
-
-
               ],
             ),
           );

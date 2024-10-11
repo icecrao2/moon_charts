@@ -27,26 +27,25 @@ class _MoonLinearGraphTouchArea extends StatelessWidget {
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-
-        for(int index = 0; index < tapAreaCount; index++) Container(
+      children:List.generate(tapAreaCount, (index) {
+        return Container(
           width: tapAreaWidth,
           height: tapAreaHeight,
           margin: padding,
           child: OutlinedButton(
-              onPressed: () {
-                onPressed(index);
-              },
-              style: OutlinedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                side: const BorderSide(color: Colors.transparent),
-                shape: const RoundedRectangleBorder(),
-                splashFactory: InkSplash.splashFactory,
-              ),
-              child: Container()
+            onPressed: () {
+              onPressed(index);
+            },
+            style: OutlinedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              side: const BorderSide(color: Colors.transparent),
+              shape: const RoundedRectangleBorder(),
+              splashFactory: InkSplash.splashFactory,
+            ),
+            child: const SizedBox.shrink(),
           ),
-        )
-      ],
+        );
+      }),
     );
   }
 }

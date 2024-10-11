@@ -21,5 +21,4 @@ class MoonChartPointUIModel {
     }
     return false;
   }
-
 }
