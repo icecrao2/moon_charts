@@ -1,9 +1,6 @@
 
 
-import 'package:flutter/material.dart';
-
-import '../../moon_graphs.dart';
-import '../common/common_lib.dart';
+part of moon_linear_graph_library;
 
 
 
@@ -96,8 +93,8 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
   late Animation<double> _animation;
 
   late List<MoonChartPointUIModel> oldChartPointGroup;
-  late double _widthMySelf;
-  late double _heightMySelf;
+  double _widthMySelf = 0;
+  double _heightMySelf = 0;
   final ScrollController _scrollController = ScrollController();
 
   double get _itemBetweenPadding => widget.itemBetweenPadding;
@@ -115,8 +112,29 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
   double get _xAxisHeight => _heightMySelf * 0.086466;
 
+  late int hitXIndex;
+
+
+
+
+  late _MoonLinearGraphLegend _legendWidget;
+  late _MoonLinearGraphYLabel _yLabelWidget;
+  late _MoonLinearGraphTouchArea _touchAreaWidget;
+  late _MoonLinearGraphYAxisGroup _yAxisGroupWidget;
+  late _MoonLinearGraphXLabel _xLabelWidget;
+
+
+
+
+
+
+
   @override
   void initState() {
+
+    hitXIndex = widget.hitXIndex;
+
+    _legendWidget = _MoonLinearGraphLegend(widget.legend);
 
     _controller = AnimationController(
       vsync: this,
@@ -133,6 +151,8 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
     super.didUpdateWidget(oldWidget);
 
+    hitXIndex = widget.hitXIndex;
+
     if(!isEqual(oldChartPointGroup, widget.chartPointGroup) || oldWidget.chartPointGroup.isEmpty) {
 
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
@@ -146,18 +166,6 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
     }
   }
 
-  bool isEqual(List<MoonChartPointUIModel> list1, List<MoonChartPointUIModel> list2) {
-    if (list1.length != list2.length) {
-      return false; // 길이가 다르면 다름
-    }
-    for (int i = 0; i < list1.length; i++) {
-      if (list1[i].x != list2[i].x || list1[i].y != list2[i].y) {
-        return false; // 요소가 다르면 다름
-      }
-    }
-
-    return true; // 모든 요소가 같으면 같음
-  }
 
   @override
   void dispose() {
@@ -168,31 +176,67 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
   @override
   Widget build(BuildContext context) {
 
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
 
-        _widthMySelf = constraints.maxWidth;
-        _heightMySelf = constraints.maxHeight;
+        if(constraints.maxHeight != _heightMySelf || constraints.maxWidth != _widthMySelf) {
+
+          _widthMySelf = constraints.maxWidth;
+          _heightMySelf = constraints.maxHeight;
+
+          _yLabelWidget = _MoonLinearGraphYLabel(
+              height: _heightMySelf, maxY: widget.maxY,
+              yAxisScale: _yAxisScale, yAxisWidth: _yAxisWidth,
+              yAxisUnitHeight: _yAxisUnitHeight, xAxisLabelPrecision: widget.xAxisLabelPrecision,
+              xAxisLabelSuffixUnit: widget.xAxisLabelSuffixUnit, textStyle: widget.yAxisTextStyle
+          );
+
+          _touchAreaWidget = _MoonLinearGraphTouchArea(
+              tapAreaCount: widget.chartPointGroup.length, tapAreaWidth: _itemWidth,
+              tapAreaHeight: _graphHeight, padding: EdgeInsets.only(right: _itemBetweenPadding),
+              onPressed: (index) {
+                setState(() {
+                  hitXIndex = index;
+                  widget.onChangeSelectedIndex(index);
+                });
+              }
+          );
+
+          _yAxisGroupWidget = _MoonLinearGraphYAxisGroup(
+              axisCount: widget.chartPointGroup.length,
+              padding: EdgeInsets.only(right: _itemBetweenPadding),
+              axisWidth: _itemWidth,
+              axisHeight: _graphHeight,
+              line: widget.dottedLineUIModel
+          );
+
+          _xLabelWidget = _MoonLinearGraphXLabel(
+              chartPointGroup: widget.chartPointGroup,
+              labelWidth: _itemWidth,
+              labelMargin: EdgeInsets.only(right: _itemBetweenPadding),
+              hitXIndex: hitXIndex,
+              selectedXLabelTextStyle: widget.selectedXAxisTextStyle,
+              unSelectedXLabelTextStyle: widget.unSelectedXAxisTextStyle
+          );
+        }
+
 
         return Container(
           padding: widget.backgroundCardPadding,
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: const Color.fromRGBO(223, 230, 238, 1),
-                width: 1,
-              ),
-              boxShadow:[
-                widget.backgroundBoxShadow
-              ]
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: const Color.fromRGBO(223, 230, 238, 1),
+              width: 1,
+            ),
+            boxShadow:[
+              widget.backgroundBoxShadow
+            ]
           ),
           child: Stack(
             children: [
-              SizedBox(
-                width: _scrollWidthMySelf,
-                height: _heightMySelf,
-              ),
 
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -205,236 +249,87 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                     ),
 
                     Positioned(
-                        bottom: 0,
-                        left: _yAxisWidth,
-                        child: Row(
-                          children: [
-                            for(int index = 0; index < widget.chartPointGroup.length; index++) Container(
-                              width: _itemWidth,
-                              margin: EdgeInsets.only(right: _itemBetweenPadding),
-                              alignment: Alignment.center,
-                              child: Text(
-                                  widget.chartPointGroup[index].x,
-                                  textAlign: TextAlign.center,
-                                  style: widget.hitXIndex == index ? widget.selectedXAxisTextStyle : widget.unSelectedXAxisTextStyle
-                              ),
-                            )
-                          ],
-                        )
+                      bottom: 0,
+                      left: _yAxisWidth,
+                      child: _xLabelWidget
                     ),
 
                     Positioned(
-                        bottom: _xAxisHeight - widget.backgroundCardPadding.bottom,
-                        left: _yAxisWidth,
-                        child: Row(
-                          children: [
-                            for(int index = 0; index < widget.chartPointGroup.length; index++) Container(
-                                margin: EdgeInsets.only(right: _itemBetweenPadding),
-                                child: MoonDottedLine.fromDottedLineUIModel(
-                                  width: _itemWidth,
-                                  height: _graphHeight,
-                                  dottedLineUIModel: widget.hitXIndex == index ? widget.selectedDottedLineUIModel : widget.dottedLineUIModel
-                                )
-                            )
-                          ],
-                        )
+                      bottom: _xAxisHeight - widget.backgroundCardPadding.bottom,
+                      left: _yAxisWidth,
+                      child: _yAxisGroupWidget
                     ),
 
                     Positioned(
-                        top: widget.backgroundCardPadding.top,
-                        left: _yAxisWidth,
-                        child: Row(
-                          children: [
-                            for(int index = 0; index < widget.chartPointGroup.length; index++) SizedBox(
-                              width: _itemWidth + _itemBetweenPadding,
-                              child: Text(
-                                widget.hitXIndex == index ? widget.chartPointGroup[index].y.toStringAsFixed(2) : "",
-                                style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600
-                                ),
-                              ),
-                            )
-                          ],
-                        )
+                      bottom: _xAxisHeight - widget.backgroundCardPadding.bottom,
+                      left: _yAxisWidth + ((_itemBetweenPadding + _itemWidth) * hitXIndex),
+                      child: MoonDottedLine.fromDottedLineUIModel(
+                        width: _itemWidth,
+                        height: _graphHeight,
+                        dottedLineUIModel: widget.selectedDottedLineUIModel,
+                      )
                     ),
 
+                    Positioned(
+                      top: widget.backgroundCardPadding.top,
+                      left: _yAxisWidth + ((_itemWidth + _itemBetweenPadding) * hitXIndex),
+                      child:  Text(
+                        widget.chartPointGroup[hitXIndex].y.toStringAsFixed(2),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600
+                        ),
+                      ),
+                    ),
 
                     Positioned(
-                        bottom: _xAxisHeight - 1,
+                        bottom: _xAxisHeight ,
                         left: _yAxisWidth,
-                        child: Container(
+                        child: SizedBox(
                           width: widget.chartPointGroup.length * (_itemWidth + _itemBetweenPadding),
-                          height: 1,
-                          decoration: const BoxDecoration(
+                          child: const Divider(
                             color: Colors.black,
+                            height: 0,
+                            thickness: 1,
                           ),
-                        )
+                        ),
                     ),
 
                     Positioned(
                         bottom: _xAxisHeight,
                         left: _yAxisWidth + _itemBetweenPadding + (_itemBarWidth / 2),
-                        child: CustomPaint(
-                          size: Size(_scrollWidthMySelf - _itemWidth - _itemBetweenPadding, _graphHeight),
-                          painter: _MoonLinearGraphPainter(nodeGroup: widget.chartPointGroup, oldNodeGroup: oldChartPointGroup, animation: _animation),
+                        child: RepaintBoundary(
+                          child: CustomPaint(
+                            size: Size(_scrollWidthMySelf - _itemWidth - _itemBetweenPadding, _graphHeight),
+                            painter: _MoonLinearGraphLinePainter(nodeGroup: widget.chartPointGroup, oldNodeGroup: oldChartPointGroup, animation: _animation),
+                          ),
                         )
                     ),
 
                     Positioned(
                         bottom: _xAxisHeight,
                         left: _yAxisWidth,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-
-                            for(int index = 0; index < widget.chartPointGroup.length; index++) Container(
-                              width: _itemWidth,
-                              height: _graphHeight,
-                              margin: EdgeInsets.only(right: _itemBetweenPadding),
-                              child: OutlinedButton(
-                                  onPressed: () {
-                                    widget.onChangeSelectedIndex(index);
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    side: const BorderSide(color: Colors.transparent),
-                                    shape: const RoundedRectangleBorder(),
-                                    splashFactory: InkSplash.splashFactory,
-                                  ),
-                                  child: Container()
-                              ),
-                            )
-                          ],
-                        )
+                        child: _touchAreaWidget
                     ),
-
                   ],
                 ),
               ),
 
               Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Container(
-                    width: _yAxisWidth,
-                    height: _heightMySelf,
-                    color: Colors.white,
-                  )
+                bottom: _xAxisHeight,
+                left: 0,
+                child: _yLabelWidget
               ),
-
-              Positioned(
-                  bottom: _xAxisHeight,
-                  left: 0,
-                  child: Container(
-                    color: Colors.white,
-                    height: _heightMySelf,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      verticalDirection: VerticalDirection.down,
-                      children: [
-
-                        for(double number = widget.maxY; number >= 0; number -= _yAxisScale) Container(
-                          width: _yAxisWidth,
-                          height: _yAxisUnitHeight,
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                            "${number.toStringAsFixed(widget.xAxisLabelPrecision)}${widget.xAxisLabelSuffixUnit}",
-                            textAlign: TextAlign.center,
-                            style: widget.yAxisTextStyle
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-              ),
-
 
               Positioned(
                   top: widget.backgroundCardPadding.top / 2,
                   left: widget.backgroundCardPadding.left / 2,
-                  child: Text(
-                    widget.legend,
-                    style: const TextStyle(
-                      fontSize: 10,
-                    ),
-                  )
+                  child: _legendWidget,
               ),
-
             ],
           ),
         );
       }
     );
   }
-}
-
-
-
-
-
-
-
-
-
-
-class _MoonLinearGraphPainter extends CustomPainter {
-
-  final List<MoonChartPointUIModel> nodeGroup;
-  final List<MoonChartPointUIModel> oldNodeGroup;
-  final Animation<double> animation;
-
-  List<double> get _different {
-    List<double> x = [];
-
-    int length = oldNodeGroup.length > nodeGroup.length ? nodeGroup.length : oldNodeGroup.length;
-
-    for(int index = 0 ; index < length ; index = index + 1) {
-      x.add(nodeGroup[index].y - oldNodeGroup[index].y);
-    }
-    return x;
-  }
-
-  const _MoonLinearGraphPainter({required this.nodeGroup, required this.oldNodeGroup, required this.animation}) : super(repaint: animation);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke
-      ..color = Colors.blue;
-
-    Paint fillPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = Colors.blue.withOpacity(1);
-
-    Path path = Path();
-
-    if (nodeGroup.isNotEmpty) {
-
-      for (int index = 0; index < nodeGroup.length; index++) {
-
-        double x = index * size.width / nodeGroup.length;
-
-        double newDifference = _different.length > index ? _different[index] : 0;
-        double newFev1Per = oldNodeGroup.isEmpty ? nodeGroup[index].y : (oldNodeGroup.length > index ? (oldNodeGroup[index].y + newDifference * animation.value) : (nodeGroup[index].y)) ;
-        double y = size.height - (newFev1Per * (size.height / 100));
-
-        Offset center = Offset(x, y);
-
-        if (index == 0) {
-          path.moveTo(center.dx, center.dy);
-        } else {
-          path.lineTo(center.dx, center.dy);
-        }
-
-        canvas.drawCircle(center, 3, fillPaint);
-      }
-
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
