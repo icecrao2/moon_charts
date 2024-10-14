@@ -33,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   int _hitIndex = 10;
+  String test = "test";
 
   List<MoonChartPointUIModel> chartPointGroup = [
     MoonChartPointUIModel(x: '0', y: 100),
@@ -87,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   itemBetweenPadding: 10,
                   xAxisLabelPrecision: 0,
                   xAxisLabelSuffixUnit: "%",
-                  legend: "FEV1%",
+                  legend: test,
                   unSelectedXAxisTextStyle: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
@@ -176,6 +177,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
               Row(
                 children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          test = test == "succesfewfewfewfwfwefwefwefwfes" ? "fail" : "succesfewfewfewfwfwefwefwefwfes";
+                        });
+                      },
+                      child: Text('axa')
+                  ),
+
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
