@@ -2,9 +2,13 @@
 
 library moon_linear_graph_library;
 
+
+import 'dart:ui' as ui;
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/painting.dart';
 import 'dart:math' as math;
 
 import '../../moon_graphs.dart';
