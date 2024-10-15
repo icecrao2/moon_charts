@@ -14,3 +14,7 @@
 ## 3.0.0
 
 * change naming
+
+## 3.0.1
+
+* Change README.md
