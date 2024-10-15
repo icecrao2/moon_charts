@@ -1,17 +1,17 @@
 
 
-part of graph_library;
+part of chart_library;
 
 
 
-class _MoonLinearGraphYAxisGroup extends StatelessWidget {
+class _MoonChartYAxisGroup extends StatelessWidget {
 
   final int tapAreaCount;
   final double tapAreaWidth;
   final double tapAreaRightPadding;
   final MoonDottedLineUIModel line;
 
-  const _MoonLinearGraphYAxisGroup({
+  const _MoonChartYAxisGroup({
     required this.tapAreaCount,
     required this.tapAreaWidth,
     required this.tapAreaRightPadding,
@@ -25,7 +25,7 @@ class _MoonLinearGraphYAxisGroup extends StatelessWidget {
 
     return RepaintBoundary(
       child: CustomPaint(
-        painter: _MoonLinearGraphYAxisGroupCustomPainter(
+        painter: _MoonChartYAxisGroupCustomPainter(
           tapAreaCount: tapAreaCount,
           tapAreaWidth: tapAreaWidth,
           tapAreaRightPadding: tapAreaRightPadding,
@@ -37,13 +37,13 @@ class _MoonLinearGraphYAxisGroup extends StatelessWidget {
 }
 
 
-class _MoonLinearGraphYAxisGroupCustomPainter extends CustomPainter {
+class _MoonChartYAxisGroupCustomPainter extends CustomPainter {
   int tapAreaCount;
   double tapAreaWidth;
   double tapAreaRightPadding;
   MoonDottedLineUIModel line;
 
-  _MoonLinearGraphYAxisGroupCustomPainter({
+  _MoonChartYAxisGroupCustomPainter({
     required this.tapAreaCount,
     required this.tapAreaWidth,
     required this.tapAreaRightPadding,
@@ -79,7 +79,7 @@ class _MoonLinearGraphYAxisGroupCustomPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _MoonLinearGraphYAxisGroupCustomPainter oldDelegate) {
+  bool shouldRepaint(covariant _MoonChartYAxisGroupCustomPainter oldDelegate) {
     return tapAreaCount != oldDelegate.tapAreaCount ||
         tapAreaWidth != oldDelegate.tapAreaWidth ||
         tapAreaRightPadding != oldDelegate.tapAreaRightPadding ||

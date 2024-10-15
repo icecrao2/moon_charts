@@ -1,11 +1,11 @@
 
 
-part of graph_library;
+part of chart_library;
 
 
 
 
-class _MoonLinearGraphLine extends LeafRenderObjectWidget {
+class _MoonLinearChartLine extends LeafRenderObjectWidget {
 
   final List<MoonChartPointUIModel> nodeGroup;
   final MoonChartLineStyleUIModel lineStyle;
@@ -13,7 +13,7 @@ class _MoonLinearGraphLine extends LeafRenderObjectWidget {
   final double maxY;
   final Function(int index) onPressed;
 
-  const _MoonLinearGraphLine({
+  const _MoonLinearChartLine({
     required this.nodeGroup,
     required this.hitXIndex,
     required this.lineStyle,
@@ -23,7 +23,7 @@ class _MoonLinearGraphLine extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _MoonBarGraphLineRenderBox(
+    return _MoonBarChartLineRenderBox(
         nodeGroup: nodeGroup.map((e) => e).toList(),
         oldNodeGroup: nodeGroup.map((e) => e).toList(),
         hitXIndex: hitXIndex,
@@ -34,7 +34,7 @@ class _MoonLinearGraphLine extends LeafRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _MoonBarGraphLineRenderBox renderObject) {
+  void updateRenderObject(BuildContext context, covariant _MoonBarChartLineRenderBox renderObject) {
 
     bool isChanged = false;
     bool isAnimationReady = false;
@@ -66,7 +66,7 @@ class _MoonLinearGraphLine extends LeafRenderObjectWidget {
   }
 }
 
-class _MoonBarGraphLineRenderBox extends RenderBox {
+class _MoonBarChartLineRenderBox extends RenderBox {
 
   late Ticker _ticker;
   double _progress = 0.0;
@@ -80,7 +80,7 @@ class _MoonBarGraphLineRenderBox extends RenderBox {
   int hitXIndex;
   double maxY;
 
-  _MoonBarGraphLineRenderBox({
+  _MoonBarChartLineRenderBox({
     required this.nodeGroup,
     required this.oldNodeGroup,
     required this.hitXIndex,

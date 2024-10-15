@@ -1,10 +1,10 @@
 
 
-part of graph_library;
+part of chart_library;
 
 
 
-class MoonGraph extends StatefulWidget {
+class MoonChart extends StatefulWidget {
 
   final List<MoonChartPointUIModel> chartPointGroup;
   final int hitXIndex;
@@ -20,7 +20,7 @@ class MoonGraph extends StatefulWidget {
   final MoonChartXLabelStyleUIModel xAxisLabelStyle;
   final MoonChartStyle style;
 
-  const MoonGraph.linearGraph({
+  const MoonChart.linearChart({
     super.key,
     required this.chartPointGroup,
     required this.hitXIndex,
@@ -41,7 +41,7 @@ class MoonGraph extends StatefulWidget {
     ),
   });
 
-  const MoonGraph.barGraph({
+  const MoonChart.barChart({
     super.key,
     required this.chartPointGroup,
     required this.hitXIndex,
@@ -64,11 +64,11 @@ class MoonGraph extends StatefulWidget {
 
 
   @override
-  State<StatefulWidget> createState() => _MoonGraphState();
+  State<StatefulWidget> createState() => _MoonChartState();
 }
 
 
-class _MoonGraphState extends State<MoonGraph> {
+class _MoonChartState extends State<MoonChart> {
 
   double _widthMySelf = 0;
   double _heightMySelf = 0;
@@ -78,13 +78,13 @@ class _MoonGraphState extends State<MoonGraph> {
   double get _itemWidth => widget.style.touchAreaWidth;
   int get _yAxisCount => widget.yAxisLabelStyle.labelCount;
 
-  double get _graphWidth => _widthMySelf * 0.88181818;
-  double get _graphHeight => _heightMySelf * 0.7556390;
+  double get _chartWidth => _widthMySelf * 0.88181818;
+  double get _chartHeight => _heightMySelf * 0.7556390;
 
   double get _scrollWidthMySelf => ((widget.chartPointGroup.length + 1) * (_itemWidth + _itemBetweenPadding));
   double get _yAxisScale => widget.yAxisLabelStyle.max / _yAxisCount;
   double get _yAxisWidth => _widthMySelf * 0.106061;
-  double get _yAxisUnitHeight => _graphHeight / _yAxisCount;
+  double get _yAxisUnitHeight => _chartHeight / _yAxisCount;
 
   double get _xAxisHeight => _heightMySelf * 0.086466;
 
@@ -101,14 +101,14 @@ class _MoonGraphState extends State<MoonGraph> {
   }
 
   @override
-  void didUpdateWidget(covariant MoonGraph oldWidget) {
+  void didUpdateWidget(covariant MoonChart oldWidget) {
 
     super.didUpdateWidget(oldWidget);
 
     if (widget.hitXIndex != hitXIndex) {
       hitXIndex = widget.hitXIndex;
       hitXIndexNotifier = ValueNotifier(hitXIndex);
-      double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
+      double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_chartWidth / 2);
       scrollPoint = scrollPoint.clamp(0.0, _scrollController.position.maxScrollExtent);
       _scrollController.jumpTo(scrollPoint);
     }
@@ -116,7 +116,7 @@ class _MoonGraphState extends State<MoonGraph> {
 
   LeafRenderObjectWidget? getChart() {
     if(widget.style is MoonChartBarStyleUIModel) {
-      return _MoonBarGraphBar(
+      return _MoonBarChartBar(
         hitXIndex: hitXIndex,
         barStyle: widget.style as MoonChartBarStyleUIModel,
         nodeGroup: widget.chartPointGroup,
@@ -128,7 +128,7 @@ class _MoonGraphState extends State<MoonGraph> {
         },
       );
     } else if(widget.style is MoonChartLineStyleUIModel) {
-      return _MoonLinearGraphLine(
+      return _MoonLinearChartLine(
         hitXIndex: hitXIndex,
         lineStyle: widget.style as MoonChartLineStyleUIModel,
         nodeGroup: widget.chartPointGroup,
@@ -188,7 +188,7 @@ class _MoonGraphState extends State<MoonGraph> {
                               child: ValueListenableBuilder(
                                 valueListenable: hitXIndexNotifier,
                                 builder: (_, hitXIndex, __) {
-                                  return _MoonLinearGraphXLabel(
+                                  return _MoonChartXLabel(
                                       chartPointGroup: widget.chartPointGroup,
                                       labelWidth: _itemWidth + _itemBetweenPadding,
                                       hitXIndex: hitXIndex,
@@ -227,8 +227,8 @@ class _MoonGraphState extends State<MoonGraph> {
                             bottom: _xAxisHeight,
                             left: _yAxisWidth + ((_itemBetweenPadding + _itemWidth) * hitXIndex) + (_itemWidth / 2),
                             child: SizedBox(
-                              height: _graphHeight,
-                              child: _MoonLinearGraphSelectedYAxis(line: widget.selectedDottedLineUIModel),
+                              height: _chartHeight,
+                              child: _MoonChartSelectedYAxis(line: widget.selectedDottedLineUIModel),
                             )
                           );
                         }
@@ -239,8 +239,8 @@ class _MoonGraphState extends State<MoonGraph> {
                           left: _yAxisWidth + (_itemWidth / 2),
                           child: SizedBox(
                             width: _scrollWidthMySelf - _itemWidth - _itemBetweenPadding,
-                            height: _graphHeight,
-                            child: _MoonLinearGraphYAxisGroup(
+                            height: _chartHeight,
+                            child: _MoonChartYAxisGroup(
                               tapAreaCount: widget.chartPointGroup.length,
                               tapAreaWidth: _itemWidth,
                               tapAreaRightPadding: _itemBetweenPadding,
@@ -254,7 +254,7 @@ class _MoonGraphState extends State<MoonGraph> {
                         left: _yAxisWidth + (_itemWidth / 2),
                         child: SizedBox(
                           width: _scrollWidthMySelf - _itemWidth - _itemBetweenPadding,
-                          height: _graphHeight,
+                          height: _chartHeight,
                           child: getChart()!
                         ),
                       ),
@@ -276,9 +276,9 @@ class _MoonGraphState extends State<MoonGraph> {
                     bottom: _xAxisHeight,
                     left: 0,
                     child: SizedBox(
-                      height: _graphHeight,
+                      height: _chartHeight,
                       width: _yAxisWidth,
-                      child: _MoonLinearGraphYLabel(
+                      child: _MoonChartYLabel(
                           maxY: widget.yAxisLabelStyle.max,
                           yAxisScale: _yAxisScale,
                           yAxisUnitHeight: _yAxisUnitHeight,
@@ -293,7 +293,7 @@ class _MoonGraphState extends State<MoonGraph> {
                 Positioned(
                     top: widget.backgroundCardPadding.top / 2,
                     left: widget.backgroundCardPadding.left / 2,
-                    child: _MoonLinearGraphLegend(widget.legend)
+                    child: _MoonChartLegend(widget.legend)
                 ),
               ],
             ),

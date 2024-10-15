@@ -1,10 +1,10 @@
 
 
-part of graph_library;
+part of chart_library;
 
 
 
-class _MoonLinearGraphYLabel extends LeafRenderObjectWidget {
+class _MoonChartYLabel extends LeafRenderObjectWidget {
 
   final TextStyle textStyle;
   final double maxY;
@@ -13,7 +13,7 @@ class _MoonLinearGraphYLabel extends LeafRenderObjectWidget {
   final String xAxisLabelSuffixUnit;
   final double yAxisUnitHeight;
 
-  const _MoonLinearGraphYLabel({
+  const _MoonChartYLabel({
     required this.textStyle,
     required this.maxY,
     required this.yAxisScale,
@@ -24,7 +24,7 @@ class _MoonLinearGraphYLabel extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _MoonLinearGraphYLabelRenderBox(
+    return _MoonChartYLabelRenderBox(
       textStyle: textStyle,
       maxY: maxY,
       yAxisScale: yAxisScale,
@@ -35,7 +35,7 @@ class _MoonLinearGraphYLabel extends LeafRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _MoonLinearGraphYLabelRenderBox renderObject) {
+  void updateRenderObject(BuildContext context, covariant _MoonChartYLabelRenderBox renderObject) {
 
     debugPrint('y label update render');
 
@@ -75,7 +75,7 @@ class _MoonLinearGraphYLabel extends LeafRenderObjectWidget {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is _MoonLinearGraphYLabel &&
+    return other is _MoonChartYLabel &&
         other.textStyle == textStyle &&
         other.maxY == maxY &&
         other.yAxisScale == yAxisScale &&
@@ -87,7 +87,7 @@ class _MoonLinearGraphYLabel extends LeafRenderObjectWidget {
   int get hashCode => Object.hash(textStyle, maxY, yAxisScale, xAxisLabelPrecision, xAxisLabelSuffixUnit);
 }
 
-class _MoonLinearGraphYLabelRenderBox extends RenderBox {
+class _MoonChartYLabelRenderBox extends RenderBox {
 
   late TextPainter _textPainter;
   TextStyle textStyle;
@@ -98,7 +98,7 @@ class _MoonLinearGraphYLabelRenderBox extends RenderBox {
   double yAxisUnitHeight;
 
 
-  _MoonLinearGraphYLabelRenderBox({
+  _MoonChartYLabelRenderBox({
     required this.textStyle,
     required this.maxY,
     required this.yAxisScale,

@@ -1,14 +1,14 @@
 
 
-part of graph_library;
+part of chart_library;
 
 
 
-class _MoonLinearGraphSelectedYAxis extends StatelessWidget {
+class _MoonChartSelectedYAxis extends StatelessWidget {
 
   final MoonDottedLineUIModel line;
 
-  const _MoonLinearGraphSelectedYAxis({
+  const _MoonChartSelectedYAxis({
     required this.line,
   });
 
@@ -19,18 +19,18 @@ class _MoonLinearGraphSelectedYAxis extends StatelessWidget {
 
     return RepaintBoundary(
       child: CustomPaint(
-        painter: _MoonLinearGraphSelectedYAxisCustomPainter(line: line,),
+        painter: _MoonChartSelectedYAxisCustomPainter(line: line,),
       ),
     );
   }
 }
 
 
-class _MoonLinearGraphSelectedYAxisCustomPainter extends CustomPainter {
+class _MoonChartSelectedYAxisCustomPainter extends CustomPainter {
 
   MoonDottedLineUIModel line;
 
-  _MoonLinearGraphSelectedYAxisCustomPainter({required this.line,});
+  _MoonChartSelectedYAxisCustomPainter({required this.line,});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -58,7 +58,7 @@ class _MoonLinearGraphSelectedYAxisCustomPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _MoonLinearGraphSelectedYAxisCustomPainter oldDelegate) {
+  bool shouldRepaint(covariant _MoonChartSelectedYAxisCustomPainter oldDelegate) {
     return line != oldDelegate.line;
   }
 }

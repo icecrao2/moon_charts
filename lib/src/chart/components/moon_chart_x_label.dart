@@ -1,10 +1,10 @@
 
 
-part of graph_library;
+part of chart_library;
 
 
 
-class _MoonLinearGraphXLabel extends LeafRenderObjectWidget {
+class _MoonChartXLabel extends LeafRenderObjectWidget {
 
   final List<MoonChartPointUIModel> chartPointGroup;
   final TextStyle unSelectedTextStyle;
@@ -12,7 +12,7 @@ class _MoonLinearGraphXLabel extends LeafRenderObjectWidget {
   final int hitXIndex;
   final double labelWidth;
 
-  const _MoonLinearGraphXLabel({
+  const _MoonChartXLabel({
     required this.chartPointGroup,
     required this.unSelectedTextStyle,
     required this.selectedTextStyle,
@@ -22,7 +22,7 @@ class _MoonLinearGraphXLabel extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _MoonLinearGraphXLabelRenderBox(
+    return _MoonChartXLabelRenderBox(
       chartPointGroup: chartPointGroup,
       unSelectedTextStyle: unSelectedTextStyle,
       selectedTextStyle: selectedTextStyle,
@@ -32,7 +32,7 @@ class _MoonLinearGraphXLabel extends LeafRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _MoonLinearGraphXLabelRenderBox renderObject) {
+  void updateRenderObject(BuildContext context, covariant _MoonChartXLabelRenderBox renderObject) {
 
     debugPrint('x label repaint');
 
@@ -68,7 +68,7 @@ class _MoonLinearGraphXLabel extends LeafRenderObjectWidget {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is _MoonLinearGraphXLabel &&
+    return other is _MoonChartXLabel &&
         other.unSelectedTextStyle == unSelectedTextStyle &&
         const ListEquality().equals(other.chartPointGroup, chartPointGroup) &&
         other.selectedTextStyle == selectedTextStyle &&
@@ -80,7 +80,7 @@ class _MoonLinearGraphXLabel extends LeafRenderObjectWidget {
   int get hashCode => Object.hash(unSelectedTextStyle, chartPointGroup, selectedTextStyle, hitXIndex, labelWidth);
 }
 
-class _MoonLinearGraphXLabelRenderBox extends RenderBox {
+class _MoonChartXLabelRenderBox extends RenderBox {
 
   late TextPainter _textPainter;
   List<MoonChartPointUIModel> chartPointGroup;
@@ -89,7 +89,7 @@ class _MoonLinearGraphXLabelRenderBox extends RenderBox {
   int hitXIndex;
   double labelWidth;
 
-  _MoonLinearGraphXLabelRenderBox({
+  _MoonChartXLabelRenderBox({
     required this.chartPointGroup,
     required this.unSelectedTextStyle,
     required this.selectedTextStyle,

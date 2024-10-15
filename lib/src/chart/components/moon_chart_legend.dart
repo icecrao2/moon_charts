@@ -1,21 +1,21 @@
 
 
-part of graph_library;
+part of chart_library;
 
 
 
-class _MoonLinearGraphLegend extends LeafRenderObjectWidget {
+class _MoonChartLegend extends LeafRenderObjectWidget {
   final String _legend;
 
-  const _MoonLinearGraphLegend(this._legend,);
+  const _MoonChartLegend(this._legend,);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _MoonLinearGraphLegendRenderBox(text: _legend);
+    return _MoonChartLegendRenderBox(text: _legend);
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _MoonLinearGraphLegendRenderBox renderObject) {
+  void updateRenderObject(BuildContext context, covariant _MoonChartLegendRenderBox renderObject) {
     if (renderObject.text != _legend) {
       debugPrint('update render legend');
       renderObject.text = _legend;
@@ -27,7 +27,7 @@ class _MoonLinearGraphLegend extends LeafRenderObjectWidget {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is _MoonLinearGraphLegend &&
+    return other is _MoonChartLegend &&
         other._legend == _legend;
   }
 
@@ -36,13 +36,13 @@ class _MoonLinearGraphLegend extends LeafRenderObjectWidget {
 }
 
 
-class _MoonLinearGraphLegendRenderBox extends RenderBox {
+class _MoonChartLegendRenderBox extends RenderBox {
 
   late TextPainter _textPainter;
   final TextStyle _textStyle;
   String text;
 
-  _MoonLinearGraphLegendRenderBox({required this.text,})
+  _MoonChartLegendRenderBox({required this.text,})
     :_textStyle = const TextStyle(fontSize: 10, color: Colors.black)
   {
     _textPainter = TextPainter(textDirection: TextDirection.ltr,);

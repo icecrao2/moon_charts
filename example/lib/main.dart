@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:moon_graphs/moon_graphs.dart';
+import 'package:moon_graphs/moon_charts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 300,
                 height: 300,
                 alignment: Alignment.center,
-                child: MoonGraph.linearGraph(
+                child: MoonChart.linearChart(
                   chartPointGroup: chartPointGroup,
                   hitXIndex: _hitIndex,
                   onChangeSelectedIndex: (index) {
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 300,
                 height: 300,
                 alignment: Alignment.center,
-                child: MoonGraph.barGraph(
+                child: MoonChart.barChart(
                   chartPointGroup: chartPointGroup,
                   hitXIndex: _hitIndex,
                   onChangeSelectedIndex: (index) {
