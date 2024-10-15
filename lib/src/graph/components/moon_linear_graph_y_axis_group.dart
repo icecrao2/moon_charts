@@ -23,25 +23,15 @@ class _MoonLinearGraphYAxisGroup extends StatelessWidget {
 
     debugPrint('y axis group build');
 
-    return GestureDetector(
-      onTapDown: (details) {
-        Offset tapPosition = details.localPosition;
-
-        double width = (tapAreaRightPadding + tapAreaWidth) * tapAreaCount;
-
-        int index = ((tapPosition.dx / width) * tapAreaCount).round();
-
-      },
-      child: RepaintBoundary(
-        child: CustomPaint(
-          painter: _MoonLinearGraphYAxisGroupCustomPainter(
-            tapAreaCount: tapAreaCount,
-            tapAreaWidth: tapAreaWidth,
-            tapAreaRightPadding: tapAreaRightPadding,
-            line: line,
-          ),
+    return RepaintBoundary(
+      child: CustomPaint(
+        painter: _MoonLinearGraphYAxisGroupCustomPainter(
+          tapAreaCount: tapAreaCount,
+          tapAreaWidth: tapAreaWidth,
+          tapAreaRightPadding: tapAreaRightPadding,
+          line: line,
         ),
-      )
+      ),
     );
   }
 }
