@@ -16,4 +16,20 @@ class MoonDottedLineUIModel {
     required this.space,
     required this.dotColor
   });
+
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    return other is MoonDottedLineUIModel &&
+        other.dotWidth == dotWidth &&
+        other.dotHeight == dotHeight &&
+        other.space == space &&
+        other.dotColor == dotColor;
+  }
+
+
+  @override
+  int get hashCode => Object.hash(dotWidth, dotHeight, space, dotColor);
 }

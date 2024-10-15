@@ -11,7 +11,6 @@ class MoonLinearGraph extends StatefulWidget {
   final int hitXIndex;
   final Function(int) onChangeSelectedIndex;
   final int yAxisCount;
-  final double barWidth;
   final double barTouchAreaWidth;
   final double itemBetweenPadding;
 
@@ -44,7 +43,6 @@ class MoonLinearGraph extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 500),
     this.selectedBarColor = const Color.fromRGBO(89, 147, 255, 1),
     this.unSelectedBarColor = const Color.fromRGBO(161, 161, 161, 1),
-    this.barWidth = 7,
     this.barTouchAreaWidth = 27,
     this.itemBetweenPadding = 10,
     this.unSelectedXAxisTextStyle = const TextStyle(
@@ -99,7 +97,6 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
   double get _itemBetweenPadding => widget.itemBetweenPadding;
   double get _itemWidth => widget.barTouchAreaWidth;
-  double get _itemBarWidth => widget.barWidth;
   int get _yAxisCount => widget.yAxisCount;
 
   double get _graphWidth => _widthMySelf * 0.88181818;
@@ -113,11 +110,14 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
   double get _xAxisHeight => _heightMySelf * 0.086466;
 
   late int hitXIndex;
+  late ValueNotifier<int> hitXIndexNotifier;
+
 
   @override
   void initState() {
 
     hitXIndex = widget.hitXIndex;
+    hitXIndexNotifier = ValueNotifier(hitXIndex);
 
     _controller = AnimationController(
       vsync: this,
@@ -140,6 +140,7 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
     if (widget.hitXIndex != hitXIndex) {
       hitXIndex = widget.hitXIndex;
+      hitXIndexNotifier = ValueNotifier(hitXIndex);
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
       scrollPoint = scrollPoint.clamp(0.0, _scrollController.position.maxScrollExtent);
       _scrollController.jumpTo(scrollPoint);
@@ -204,89 +205,88 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
                     Positioned(
                       bottom: 0,
-                      left: _yAxisWidth,
-                      child:  _MoonLinearGraphXLabel(
-                        chartPointGroup: widget.chartPointGroup,
-                        labelWidth: _itemWidth,
-                        labelMargin: EdgeInsets.only(right: _itemBetweenPadding),
-                        hitXIndex: hitXIndex,
-                        selectedXLabelTextStyle: widget.selectedXAxisTextStyle,
-                        unSelectedXLabelTextStyle: widget.unSelectedXAxisTextStyle
+                      left: _yAxisWidth + _itemBetweenPadding,
+                      child: SizedBox(
+                        height: _xAxisHeight,
+                        width: _scrollWidthMySelf,
+                        child: ValueListenableBuilder(
+                          valueListenable: hitXIndexNotifier,
+                          builder: (_, hitXIndex, __) {
+                            return _MoonLinearGraphXLabel(
+                              chartPointGroup: widget.chartPointGroup,
+                              labelWidth: _itemWidth + _itemBetweenPadding,
+                              hitXIndex: hitXIndex,
+                              selectedTextStyle: widget.selectedXAxisTextStyle,
+                              unSelectedTextStyle: widget.unSelectedXAxisTextStyle
+                            );
+                          },
+                        )
                       )
                     ),
 
-                    Positioned(
-                      bottom: _xAxisHeight - widget.backgroundCardPadding.bottom,
-                      left: _yAxisWidth,
-                      child: _MoonLinearGraphYAxisGroup(
-                          axisCount: widget.chartPointGroup.length,
-                          padding: EdgeInsets.only(right: _itemBetweenPadding),
-                          axisWidth: _itemWidth,
-                          axisHeight: _graphHeight,
-                          line: widget.dottedLineUIModel
-                      ),
-                    ),
-
-                    Positioned(
-                      bottom: _xAxisHeight - widget.backgroundCardPadding.bottom,
-                      left: _yAxisWidth + ((_itemBetweenPadding + _itemWidth) * hitXIndex),
-                      child: MoonDottedLine.fromDottedLineUIModel(
-                        width: _itemWidth,
-                        height: _graphHeight,
-                        dottedLineUIModel: widget.selectedDottedLineUIModel,
-                      )
-                    ),
-
-                    Positioned(
-                      top: widget.backgroundCardPadding.top,
-                      left: _yAxisWidth + ((_itemWidth + _itemBetweenPadding) * hitXIndex),
-                      child:  Text(
-                        widget.chartPointGroup[hitXIndex].y.toStringAsFixed(2),
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600
-                        ),
-                      ),
-                    ),
-
-                    Positioned(
-                        bottom: _xAxisHeight ,
-                        left: _yAxisWidth,
-                        child: SizedBox(
-                          width: widget.chartPointGroup.length * (_itemWidth + _itemBetweenPadding),
-                          child: const Divider(
-                            color: Colors.black,
-                            height: 0,
-                            thickness: 1,
+                    ValueListenableBuilder(
+                      valueListenable: hitXIndexNotifier,
+                      builder: (_, hitXIndex, __) {
+                        return Positioned(
+                          top: widget.backgroundCardPadding.top,
+                          left: _yAxisWidth + ((_itemWidth + _itemBetweenPadding) * hitXIndex),
+                          child:  Text(
+                            widget.chartPointGroup[hitXIndex].y.toStringAsFixed(2),
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600
+                            ),
                           ),
-                        ),
+                        );
+                      }
+                    ),
+
+                    ValueListenableBuilder(
+                      valueListenable: hitXIndexNotifier,
+                      builder: (_, hitXIndex, __) {
+                        return Positioned(
+                          bottom: _xAxisHeight,
+                          left: _yAxisWidth + ((_itemBetweenPadding + _itemWidth) * hitXIndex) + (_itemWidth / 2),
+                          child: SizedBox(
+                            height: _graphHeight,
+                            child: _MoonLinearGraphSelectedYAxis(line: widget.selectedDottedLineUIModel),
+                          )
+                        );
+                      }
                     ),
 
                     Positioned(
-                        bottom: _xAxisHeight,
-                        left: _yAxisWidth + _itemBetweenPadding + (_itemBarWidth / 2),
-                        child: RepaintBoundary(
+                      bottom: _xAxisHeight,
+                      left: _yAxisWidth + (_itemWidth / 2),
+                      child: SizedBox(
+                        width: _scrollWidthMySelf - _itemWidth - _itemBetweenPadding,
+                        height: _graphHeight,
+                        child: _MoonLinearGraphYAxisGroup(
+                          tapAreaCount: widget.chartPointGroup.length,
+                          tapAreaWidth: _itemWidth,
+                          tapAreaRightPadding: _itemBetweenPadding,
+                          line: widget.dottedLineUIModel,
+                          onPressed: (index) {
+                            if(hitXIndex != index) {
+                              hitXIndex = index;
+                              hitXIndexNotifier.value = index;
+                              widget.onChangeSelectedIndex(index);
+                            }
+                          }
+                        ),
+                      )
+                    ),
+
+                    Positioned(
+                      bottom: _xAxisHeight,
+                      left:_yAxisWidth + (_itemWidth / 2),
+                      child: RepaintBoundary(
+                        child: IgnorePointer(
                           child: CustomPaint(
                             size: Size(_scrollWidthMySelf - _itemWidth - _itemBetweenPadding, _graphHeight),
                             painter: _MoonLinearGraphLinePainter(nodeGroup: widget.chartPointGroup, oldNodeGroup: oldChartPointGroup, animation: _animation),
                           ),
                         )
-                    ),
-
-                    Positioned(
-                      bottom: _xAxisHeight,
-                      left: _yAxisWidth,
-                      child: _MoonLinearGraphTouchArea(
-                        tapAreaCount: widget.chartPointGroup.length, tapAreaWidth: _itemWidth,
-                        tapAreaHeight: _graphHeight, padding: EdgeInsets.only(right: _itemBetweenPadding),
-                        onPressed: (index) {
-                          if(hitXIndex != index) {
-                            setState(() {
-                              hitXIndex = index;
-                              widget.onChangeSelectedIndex(index);
-                            });
-                          }
-                        }
                       )
                     ),
                   ],
@@ -294,20 +294,37 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
               ),
 
               Positioned(
-                bottom: _xAxisHeight,
+                bottom: 0,
                 left: 0,
-                child: _MoonLinearGraphYLabel(
-                    height: _heightMySelf, maxY: widget.maxY,
-                    yAxisScale: _yAxisScale, yAxisWidth: _yAxisWidth,
-                    yAxisUnitHeight: _yAxisUnitHeight, xAxisLabelPrecision: widget.xAxisLabelPrecision,
-                    xAxisLabelSuffixUnit: widget.xAxisLabelSuffixUnit, textStyle: widget.yAxisTextStyle
+                child: Container(
+                  color: Colors.white,
+                  width: _yAxisWidth,
+                  height: _heightMySelf,
                 )
               ),
 
               Positioned(
+                bottom: _xAxisHeight,
+                left: 0,
+                child: SizedBox(
+                  height: _graphHeight,
+                  width: _yAxisWidth,
+                  child: _MoonLinearGraphYLabel(
+                    maxY: widget.maxY,
+                    yAxisScale: _yAxisScale,
+                    yAxisUnitHeight: _yAxisUnitHeight,
+                    xAxisLabelPrecision: widget.xAxisLabelPrecision,
+                    xAxisLabelSuffixUnit: widget.xAxisLabelSuffixUnit,
+                    textStyle: widget.yAxisTextStyle
+                  ),
+                )
+              ),
+
+
+              Positioned(
                 top: widget.backgroundCardPadding.top / 2,
                 left: widget.backgroundCardPadding.left / 2,
-                child: _MoonLinearGraphLegend(widget.legend),
+                child: _MoonLinearGraphLegend(widget.legend)
               ),
             ],
           ),

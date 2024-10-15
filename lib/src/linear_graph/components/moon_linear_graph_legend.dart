@@ -17,6 +17,7 @@ class _MoonLinearGraphLegend extends LeafRenderObjectWidget {
   @override
   void updateRenderObject(BuildContext context, covariant _MoonLinearGraphLegendRenderBox renderObject) {
     if (renderObject.text != _legend) {
+      debugPrint('update render legend');
       renderObject.text = _legend;
       renderObject.markNeedsLayout();
     }
@@ -56,7 +57,13 @@ class _MoonLinearGraphLegendRenderBox extends RenderBox {
   }
 
   @override
+  bool get isRepaintBoundary => true;
+
+  @override
   void paint(PaintingContext context, Offset offset) {
+
+    debugPrint('paint legend');
+
     _textPainter.paint(context.canvas, offset);
   }
 }
