@@ -11,9 +11,6 @@ class MoonChartPointUIModel {
   const MoonChartPointUIModel({required this.x, required this.y});
 
   @override
-  int get hashCode => x.hashCode ^ y.hashCode;
-
-  @override
   bool operator ==(Object other) {
 
     if (other is MoonChartPointUIModel) {
@@ -21,5 +18,8 @@ class MoonChartPointUIModel {
     }
     return false;
   }
+
+  @override
+  int get hashCode => x.hashCode ^ y.hashCode;
 
 }
