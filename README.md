@@ -12,7 +12,7 @@ Perfect for developers and data analysts looking to add a polished, animated tou
 ## Getting started
 
 ```
-flutter pub add moon_graphs
+flutter pub add moon_charts
 ```
 
 ## Usage
