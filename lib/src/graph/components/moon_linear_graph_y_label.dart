@@ -1,6 +1,6 @@
 
 
-part of moon_linear_graph_library;
+part of graph_library;
 
 
 
@@ -59,6 +59,10 @@ class _MoonLinearGraphYLabel extends LeafRenderObjectWidget {
     }
     if (renderObject.xAxisLabelSuffixUnit != xAxisLabelSuffixUnit) {
       renderObject.xAxisLabelSuffixUnit = xAxisLabelSuffixUnit;
+      isChanged = true;
+    }
+    if(renderObject.yAxisUnitHeight != yAxisUnitHeight) {
+      renderObject.yAxisUnitHeight = yAxisUnitHeight;
       isChanged = true;
     }
 

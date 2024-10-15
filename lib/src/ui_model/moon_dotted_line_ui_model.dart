@@ -17,7 +17,6 @@ class MoonDottedLineUIModel {
     required this.dotColor
   });
 
-
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -28,7 +27,6 @@ class MoonDottedLineUIModel {
         other.space == space &&
         other.dotColor == dotColor;
   }
-
 
   @override
   int get hashCode => Object.hash(dotWidth, dotHeight, space, dotColor);

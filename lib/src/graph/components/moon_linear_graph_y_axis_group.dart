@@ -1,6 +1,6 @@
 
 
-part of moon_linear_graph_library;
+part of graph_library;
 
 
 
@@ -10,14 +10,12 @@ class _MoonLinearGraphYAxisGroup extends StatelessWidget {
   final double tapAreaWidth;
   final double tapAreaRightPadding;
   final MoonDottedLineUIModel line;
-  final Function(int index) onPressed;
 
   const _MoonLinearGraphYAxisGroup({
     required this.tapAreaCount,
     required this.tapAreaWidth,
     required this.tapAreaRightPadding,
     required this.line,
-    required this.onPressed
   });
 
   @override
@@ -33,7 +31,6 @@ class _MoonLinearGraphYAxisGroup extends StatelessWidget {
 
         int index = ((tapPosition.dx / width) * tapAreaCount).round();
 
-        onPressed(index);
       },
       child: RepaintBoundary(
         child: CustomPaint(

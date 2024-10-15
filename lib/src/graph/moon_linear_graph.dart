@@ -1,66 +1,35 @@
 
 
-part of moon_linear_graph_library;
+part of graph_library;
 
 
 
 class MoonLinearGraph extends StatefulWidget {
 
   final List<MoonChartPointUIModel> chartPointGroup;
-  final double maxY;
   final int hitXIndex;
   final Function(int) onChangeSelectedIndex;
-  final int yAxisCount;
-  final double barTouchAreaWidth;
-  final double itemBetweenPadding;
-
-  final Color selectedBarColor;
-  final Color unSelectedBarColor;
   final EdgeInsets backgroundCardPadding;
-  final Duration animationDuration;
   final BoxShadow backgroundBoxShadow;
-
   final String legend;
-  final int xAxisLabelPrecision;
-  final String xAxisLabelSuffixUnit;
-  final TextStyle unSelectedXAxisTextStyle;
-  final TextStyle selectedXAxisTextStyle;
-  final TextStyle yAxisTextStyle;
-  final MoonDottedLineUIModel dottedLineUIModel;
+
+
+  final MoonDottedLineUIModel unSelectedDottedLineUIModel;
   final MoonDottedLineUIModel selectedDottedLineUIModel;
+  final MoonChartYLabelStyleUIModel yAxisLabelStyle;
+  final MoonChartXLabelStyleUIModel xAxisLabelStyle;
+  final MoonChartLineStyleUIModel lineStyle;
+
+
 
   const MoonLinearGraph({
     super.key,
     required this.chartPointGroup,
-    required this.maxY,
     required this.hitXIndex,
     required this.onChangeSelectedIndex,
-    this.legend = "",
-    this.xAxisLabelPrecision = 1,
-    this.xAxisLabelSuffixUnit = "",
-    this.yAxisCount = 5,
     this.backgroundCardPadding = const EdgeInsets.all(5),
-    this.animationDuration = const Duration(milliseconds: 500),
-    this.selectedBarColor = const Color.fromRGBO(89, 147, 255, 1),
-    this.unSelectedBarColor = const Color.fromRGBO(161, 161, 161, 1),
-    this.barTouchAreaWidth = 27,
-    this.itemBetweenPadding = 10,
-    this.unSelectedXAxisTextStyle = const TextStyle(
-      fontSize: 11,
-      fontWeight: FontWeight.w500,
-      color: Color.fromRGBO(81, 81, 81, 1),
-    ),
-    this.selectedXAxisTextStyle = const TextStyle(
-      fontSize: 11,
-      fontWeight: FontWeight.w600,
-      color: Color.fromRGBO(89, 147, 255, 1),
-    ),
-    this.yAxisTextStyle = const TextStyle(
-      fontSize: 11,
-      fontWeight: FontWeight.w500,
-      color: Color.fromRGBO(81, 81, 81, 1),
-    ),
-    this.dottedLineUIModel = const MoonDottedLineUIModel(
+    this.legend = "",
+    this.unSelectedDottedLineUIModel = const MoonDottedLineUIModel(
       dotWidth: 1,
       dotHeight: 6,
       space: 4,
@@ -78,6 +47,40 @@ class MoonLinearGraph extends StatefulWidget {
         spreadRadius: 0.1,
         offset: Offset(2, 2)
     ),
+    this.lineStyle = const MoonChartLineStyleUIModel(
+      lineColor: Colors.blue,
+      lineWidth: 3,
+      unSelectedCircleColor: Colors.blue,
+      unSelectedCircleRadius: 3,
+      selectedCircleColor: Colors.blue,
+      selectedCircleRadius: 5,
+      animationDuration: Duration(milliseconds: 500),
+      touchAreaWidth: 27,
+      itemBetweenPadding: 10
+    ),
+    this.yAxisLabelStyle = const MoonChartYLabelStyleUIModel(
+      max: 100,
+      labelCount: 5,
+      textStyle: TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: Color.fromRGBO(81, 81, 81, 1),
+      ),
+      labelPrecision: 0,
+      labelSuffixUnit: "%"
+    ),
+    this.xAxisLabelStyle = const MoonChartXLabelStyleUIModel(
+      selectedTextStyle:  TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w600,
+        color: Color.fromRGBO(89, 147, 255, 1),
+      ),
+      unSelectedTextStyle: TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: Color.fromRGBO(81, 81, 81, 1),
+      ),
+    ),
   });
 
   @override
@@ -85,25 +88,21 @@ class MoonLinearGraph extends StatefulWidget {
 }
 
 
-class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderStateMixin{
+class LinearGraphState extends State<MoonLinearGraph> {
 
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  late List<MoonChartPointUIModel> oldChartPointGroup;
   double _widthMySelf = 0;
   double _heightMySelf = 0;
   final ScrollController _scrollController = ScrollController();
 
-  double get _itemBetweenPadding => widget.itemBetweenPadding;
-  double get _itemWidth => widget.barTouchAreaWidth;
-  int get _yAxisCount => widget.yAxisCount;
+  double get _itemBetweenPadding => widget.lineStyle.itemBetweenPadding;
+  double get _itemWidth => widget.lineStyle.touchAreaWidth;
+  int get _yAxisCount => widget.yAxisLabelStyle.labelCount;
 
   double get _graphWidth => _widthMySelf * 0.88181818;
   double get _graphHeight => _heightMySelf * 0.7556390;
 
   double get _scrollWidthMySelf => ((widget.chartPointGroup.length + 1) * (_itemWidth + _itemBetweenPadding));
-  double get _yAxisScale => widget.maxY / _yAxisCount;
+  double get _yAxisScale => widget.yAxisLabelStyle.max / _yAxisCount;
   double get _yAxisWidth => _widthMySelf * 0.106061;
   double get _yAxisUnitHeight => _graphHeight / _yAxisCount;
 
@@ -118,17 +117,6 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
     hitXIndex = widget.hitXIndex;
     hitXIndexNotifier = ValueNotifier(hitXIndex);
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.animationDuration
-    );
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
-    oldChartPointGroup = widget.chartPointGroup.map((e) => e).toList();
-
-    _controller.addStatusListener(_statusListener);
-
-
     super.initState();
   }
 
@@ -137,34 +125,12 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
 
     super.didUpdateWidget(oldWidget);
 
-
     if (widget.hitXIndex != hitXIndex) {
       hitXIndex = widget.hitXIndex;
       hitXIndexNotifier = ValueNotifier(hitXIndex);
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_graphWidth / 2);
       scrollPoint = scrollPoint.clamp(0.0, _scrollController.position.maxScrollExtent);
       _scrollController.jumpTo(scrollPoint);
-    }
-
-    if(!const ListEquality().equals(oldChartPointGroup, widget.chartPointGroup) || oldWidget.chartPointGroup.isEmpty) {
-
-      if(_controller.isAnimating) {
-        _controller.stop();
-      }
-      _controller.forward(from: 0.0);
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.removeStatusListener(_statusListener);
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _statusListener(AnimationStatus status) {
-    if (status == AnimationStatus.completed) {
-      oldChartPointGroup = widget.chartPointGroup.map((e) => e).toList();
     }
   }
 
@@ -216,8 +182,8 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                               chartPointGroup: widget.chartPointGroup,
                               labelWidth: _itemWidth + _itemBetweenPadding,
                               hitXIndex: hitXIndex,
-                              selectedTextStyle: widget.selectedXAxisTextStyle,
-                              unSelectedTextStyle: widget.unSelectedXAxisTextStyle
+                              selectedTextStyle: widget.xAxisLabelStyle.selectedTextStyle,
+                              unSelectedTextStyle: widget.xAxisLabelStyle.unSelectedTextStyle
                             );
                           },
                         )
@@ -265,29 +231,29 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                           tapAreaCount: widget.chartPointGroup.length,
                           tapAreaWidth: _itemWidth,
                           tapAreaRightPadding: _itemBetweenPadding,
-                          line: widget.dottedLineUIModel,
-                          onPressed: (index) {
-                            if(hitXIndex != index) {
-                              hitXIndex = index;
-                              hitXIndexNotifier.value = index;
-                              widget.onChangeSelectedIndex(index);
-                            }
-                          }
+                          line: widget.unSelectedDottedLineUIModel,
                         ),
                       )
                     ),
 
                     Positioned(
                       bottom: _xAxisHeight,
-                      left:_yAxisWidth + (_itemWidth / 2),
-                      child: RepaintBoundary(
-                        child: IgnorePointer(
-                          child: CustomPaint(
-                            size: Size(_scrollWidthMySelf - _itemWidth - _itemBetweenPadding, _graphHeight),
-                            painter: _MoonLinearGraphLinePainter(nodeGroup: widget.chartPointGroup, oldNodeGroup: oldChartPointGroup, animation: _animation),
-                          ),
-                        )
-                      )
+                      left: _yAxisWidth + (_itemWidth / 2),
+                      child: SizedBox(
+                        width: _scrollWidthMySelf - _itemWidth - _itemBetweenPadding,
+                        height: _graphHeight,
+                        child: _MoonLinearGraphLine(
+                          hitXIndex: hitXIndex,
+                          lineStyle: widget.lineStyle,
+                          nodeGroup: widget.chartPointGroup,
+                          maxY: widget.yAxisLabelStyle.max,
+                          onPressed: (index) {
+                            hitXIndex =  index;
+                            hitXIndexNotifier.value = index;
+                            widget.onChangeSelectedIndex(index);
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -310,12 +276,12 @@ class LinearGraphState extends State<MoonLinearGraph> with SingleTickerProviderS
                   height: _graphHeight,
                   width: _yAxisWidth,
                   child: _MoonLinearGraphYLabel(
-                    maxY: widget.maxY,
+                    maxY: widget.yAxisLabelStyle.max,
                     yAxisScale: _yAxisScale,
                     yAxisUnitHeight: _yAxisUnitHeight,
-                    xAxisLabelPrecision: widget.xAxisLabelPrecision,
-                    xAxisLabelSuffixUnit: widget.xAxisLabelSuffixUnit,
-                    textStyle: widget.yAxisTextStyle
+                    xAxisLabelPrecision: widget.yAxisLabelStyle.labelPrecision,
+                    xAxisLabelSuffixUnit: widget.yAxisLabelStyle.labelSuffixUnit,
+                    textStyle: widget.yAxisLabelStyle.textStyle
                   ),
                 )
               ),

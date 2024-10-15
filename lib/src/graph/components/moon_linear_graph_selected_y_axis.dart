@@ -1,6 +1,6 @@
 
 
-part of moon_linear_graph_library;
+part of graph_library;
 
 
 

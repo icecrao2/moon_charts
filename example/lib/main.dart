@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
     MoonChartPointUIModel(x: '3', y: 40),
   ];
 
-  var x = 27;
+  var x = 7;
   var y = 4;
   @override
   Widget build(BuildContext context) {
@@ -73,37 +73,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.center,
                 child: MoonLinearGraph(
                   chartPointGroup: chartPointGroup,
-                  maxY: 100,
                   hitXIndex: _hitIndex,
-                  yAxisCount: 4,
                   onChangeSelectedIndex: (index) {
                     _hitIndex = index;
                   },
                   backgroundCardPadding: const EdgeInsets.all(5),
-                  animationDuration: const Duration(milliseconds: 500),
-                  selectedBarColor: Colors.blue,
-                  unSelectedBarColor: Colors.grey,
-                  barTouchAreaWidth: 27,
-                  itemBetweenPadding: 10,
-                  xAxisLabelPrecision: 0,
-                  xAxisLabelSuffixUnit: "%",
                   legend: "FEV1%",
-                  unSelectedXAxisTextStyle: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey
-                  ),
-                  selectedXAxisTextStyle: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.blue
-                  ),
-                  yAxisTextStyle: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey
-                  ),
-                  dottedLineUIModel: MoonDottedLineUIModel(
+                  unSelectedDottedLineUIModel: MoonDottedLineUIModel(
                       dotWidth: 1,
                       dotHeight: 6,
                       space: 0,
@@ -131,34 +107,11 @@ class _MyHomePageState extends State<MyHomePage> {
               //   alignment: Alignment.center,
               //   child: MoonBarGraph(
               //     chartPointGroup: chartPointGroup,
-              //     maxY: 60,
               //     hitXIndex: _hitIndex,
-              //     yAxisCount: 5,
               //     onChangeSelectedIndex: (index) {
               //       _hitIndex = index;
               //     },
               //     backgroundCardPadding: const EdgeInsets.all(5),
-              //     animationDuration: const Duration(milliseconds: 500),
-              //     selectedBarColor: Colors.blue,
-              //     unSelectedBarColor: Colors.grey,
-              //     barWidth: 7,
-              //     barTouchAreaWidth: 27,
-              //     itemBetweenPadding: 10,
-              //     unSelectedXAxisTextStyle: const TextStyle(
-              //         fontSize: 11,
-              //         fontWeight: FontWeight.w500,
-              //         color: Colors.grey
-              //     ),
-              //     selectedXAxisTextStyle: const TextStyle(
-              //         fontSize: 11,
-              //         fontWeight: FontWeight.w600,
-              //         color: Colors.blue
-              //     ),
-              //     yAxisTextStyle: const TextStyle(
-              //         fontSize: 11,
-              //         fontWeight: FontWeight.w500,
-              //         color: Colors.grey
-              //     ),
               //     dottedLineUIModel: MoonDottedLineUIModel(
               //         dotWidth: 1,
               //         dotHeight: 6,
@@ -171,6 +124,37 @@ class _MyHomePageState extends State<MyHomePage> {
               //         spreadRadius: 0.1,
               //         offset: Offset(2, 2)
               //     ),
+              //     barStyle: const MoonChartBarStyleUIModel(
+              //       unSelectedColor: Colors.grey,
+              //       selectedColor: Colors.blue,
+              //       lineWidth: 7,
+              //       animationDuration: Duration(milliseconds: 500),
+              //       touchAreaWidth: 27,
+              //       itemBetweenPadding: 10
+              //     ),
+              //     yAxisLabelStyle: const MoonChartYLabelStyleUIModel(
+              //         max: 120,
+              //         labelCount: 5,
+              //         labelPrecision: 0,
+              //         labelSuffixUnit: "",
+              //         textStyle: TextStyle(
+              //           fontSize: 11,
+              //           fontWeight: FontWeight.w500,
+              //           color: Color.fromRGBO(81, 81, 81, 1),
+              //         )
+              //     ),
+              //     xAxisLabelStyle: const MoonChartXLabelStyleUIModel(
+              //       selectedTextStyle: TextStyle(
+              //         fontSize: 11,
+              //         fontWeight: FontWeight.w600,
+              //         color: Color.fromRGBO(89, 147, 255, 1),
+              //       ),
+              //       unSelectedTextStyle: TextStyle(
+              //         fontSize: 11,
+              //         fontWeight: FontWeight.w500,
+              //         color: Color.fromRGBO(81, 81, 81, 1),
+              //       ),
+              //     ),
               //   ),
               // ),
 
@@ -180,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          x = 10000;
+                          x = 10;
                           y = 10;
                         });
                       },
