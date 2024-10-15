@@ -4,23 +4,46 @@ part of ui_model_library;
 
 
 
-class MoonChartBarStyleUIModel {
+abstract class MoonChartStyle {
 
-  final Color unSelectedColor;
-  final Color selectedColor;
   final double lineWidth;
   final Duration animationDuration;
   final double touchAreaWidth;
   final double itemBetweenPadding;
 
-  const MoonChartBarStyleUIModel({
-    required this.unSelectedColor,
-    required this.selectedColor,
+  const MoonChartStyle({
     required this.lineWidth,
     required this.animationDuration,
     required this.touchAreaWidth,
-    required this.itemBetweenPadding
+    required this.itemBetweenPadding,
   });
+}
+
+
+class MoonChartBarStyleUIModel extends MoonChartStyle {
+
+  final Color unSelectedColor;
+  final Color selectedColor;
+
+  const MoonChartBarStyleUIModel({
+    required this.unSelectedColor,
+    required this.selectedColor,
+    required super.lineWidth,
+    required super.animationDuration,
+    required super.touchAreaWidth,
+    required super.itemBetweenPadding
+  });
+
+  const MoonChartBarStyleUIModel.fromDefault()
+    : unSelectedColor = Colors.grey,
+      selectedColor = Colors.blue,
+      super(
+        lineWidth: 7,
+        animationDuration: const Duration(milliseconds: 500),
+        touchAreaWidth: 27,
+        itemBetweenPadding: 10
+      );
+
 
   @override
   bool operator ==(Object other) {
@@ -38,31 +61,38 @@ class MoonChartBarStyleUIModel {
 }
 
 
-class MoonChartLineStyleUIModel {
+class MoonChartLineStyleUIModel extends MoonChartStyle {
 
   final Color lineColor;
-  final double lineWidth;
-
   final Color unSelectedCircleColor;
   final double unSelectedCircleRadius;
   final Color selectedCircleColor;
   final double selectedCircleRadius;
 
-  final Duration animationDuration;
-  final double touchAreaWidth;
-  final double itemBetweenPadding;
-
   const MoonChartLineStyleUIModel({
     required this.lineColor,
-    required this.lineWidth,
     required this.unSelectedCircleColor,
     required this.unSelectedCircleRadius,
     required this.selectedCircleColor,
     required this.selectedCircleRadius,
-    required this.animationDuration,
-    required this.touchAreaWidth,
-    required this.itemBetweenPadding
+    required super.lineWidth,
+    required super.animationDuration,
+    required super.touchAreaWidth,
+    required super.itemBetweenPadding
   });
+
+  const MoonChartLineStyleUIModel.fromDefault()
+    : lineColor = Colors.blue,
+      unSelectedCircleColor = Colors.blue,
+      unSelectedCircleRadius = 3,
+      selectedCircleColor = Colors.blue,
+      selectedCircleRadius = 5,
+      super(
+        lineWidth: 3,
+        animationDuration: const Duration(milliseconds: 500),
+        touchAreaWidth: 27,
+        itemBetweenPadding: 10
+      );
 
   @override
   bool operator ==(Object other) {
