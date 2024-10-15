@@ -10,3 +10,7 @@
 
 * upgrade performance
 * change interface
+
+## 3.0.0
+
+* change naming
