@@ -38,6 +38,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void getRandomChart() {
     if(chartPointGroup.isEmpty) {
       chartPointGroup = [
+        MoonChartPointUIModel(x: '3', y: 0),
+        MoonChartPointUIModel(x: '3', y: 10),
+        MoonChartPointUIModel(x: '3', y: 0),
+        MoonChartPointUIModel(x: '3', y: 10),
+        MoonChartPointUIModel(x: '3', y: 0),
+        MoonChartPointUIModel(x: '3', y: 10),
+
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),

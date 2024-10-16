@@ -150,9 +150,15 @@ class _MoonBarChartBarRenderBox extends RenderBox {
             : (nodeGroup[index].y));
         double realScreenY = size.height - (y * (size.height / maxY));
 
-        path
-          ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-          ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+        if(nodeGroup[index].y == 0) {
+          path
+            ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
+            ..lineTo(realScreenX + offset.dx, size.height + offset.dy + 0.01);
+        } else {
+          path
+            ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
+            ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+        }
 
         circlePath.addOval(Rect.fromCircle(
             center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
