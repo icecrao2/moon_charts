@@ -18,3 +18,7 @@
 ## 3.0.1
 
 * Change README.md
+
+## 3.0.2
+
+* bar chart bug fix
