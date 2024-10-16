@@ -22,3 +22,7 @@
 ## 3.0.2
 
 * bar chart bug fix
+
+## 3.0.3
+
+* fix android touch area

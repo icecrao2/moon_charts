@@ -71,6 +71,7 @@ class _MoonBarChartBarRenderBox extends RenderBox {
   double _progress = 0.0;
   bool _pointerDown = false;
   int _downIndexMemory = 0;
+  double _tapDownPosition = 0;
 
   Function(int index) onPressed;
   List<MoonChartPointUIModel> nodeGroup;
@@ -224,6 +225,7 @@ class _MoonBarChartBarRenderBox extends RenderBox {
     if (event is PointerDownEvent) {
 
       Offset tapPosition = event.localPosition;
+      _tapDownPosition = event.localPosition.dx;
 
       double width = (barStyle.itemBetweenPadding + barStyle.touchAreaWidth) * nodeGroup.length;
 
@@ -235,9 +237,11 @@ class _MoonBarChartBarRenderBox extends RenderBox {
 
     } else if(event is PointerMoveEvent && _pointerDown) {
 
-      _downIndexMemory = hitXIndex;
+      if((_tapDownPosition - event.localPosition.dx).abs() > 5) {
+        _downIndexMemory = hitXIndex;
 
-      _pointerDown = false;
+        _pointerDown = false;
+      }
 
     } else if(event is PointerUpEvent && _pointerDown) {
 
