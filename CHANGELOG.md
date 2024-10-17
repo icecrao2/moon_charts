@@ -26,3 +26,7 @@
 ## 3.0.3
 
 * fix android touch area
+
+## 3.0.4
+
+* remove print
