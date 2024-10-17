@@ -30,3 +30,7 @@
 ## 3.0.4
 
 * remove print
+
+## 3.0.6
+
+* add scroll animation

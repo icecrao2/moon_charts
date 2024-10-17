@@ -243,4 +243,7 @@ class _MoonBarChartLineRenderBox extends RenderBox {
       markNeedsPaint();
     }
   }
+
+  @override
+  bool get isRepaintBoundary => true;
 }
