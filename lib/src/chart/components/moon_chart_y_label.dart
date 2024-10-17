@@ -37,8 +37,6 @@ class _MoonChartYLabel extends LeafRenderObjectWidget {
   @override
   void updateRenderObject(BuildContext context, covariant _MoonChartYLabelRenderBox renderObject) {
 
-    debugPrint('y label update render');
-
     bool isChanged = false;
 
     if (renderObject.textStyle != textStyle) {
@@ -116,9 +114,6 @@ class _MoonChartYLabelRenderBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-
-    debugPrint('y label paint');
-
     var canvas = context.canvas;
 
     final Paint paint = Paint()..color = Colors.white;

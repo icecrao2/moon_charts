@@ -15,8 +15,6 @@ class _MoonChartSelectedYAxis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint('selected y axis group build');
-
     return RepaintBoundary(
       child: CustomPaint(
         painter: _MoonChartSelectedYAxisCustomPainter(line: line,),
@@ -34,8 +32,6 @@ class _MoonChartSelectedYAxisCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-
-    debugPrint('selected y axis group paint');
 
     var paint = ui.Paint()
       ..color = line.dotColor

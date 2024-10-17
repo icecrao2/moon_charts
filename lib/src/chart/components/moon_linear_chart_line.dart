@@ -211,8 +211,6 @@ class _MoonBarChartLineRenderBox extends RenderBox {
   @override
   void handleEvent(PointerEvent event, HitTestEntry entry) {
 
-    // print('event = $event');
-
     if (event is PointerDownEvent) {
 
       Offset tapPosition = event.localPosition;

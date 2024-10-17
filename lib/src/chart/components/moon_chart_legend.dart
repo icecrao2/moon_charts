@@ -62,8 +62,6 @@ class _MoonChartLegendRenderBox extends RenderBox {
   @override
   void paint(PaintingContext context, Offset offset) {
 
-    debugPrint('paint legend');
-
     _textPainter.paint(context.canvas, offset);
   }
 }

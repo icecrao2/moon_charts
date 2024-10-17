@@ -34,8 +34,6 @@ class _MoonChartXLabel extends LeafRenderObjectWidget {
   @override
   void updateRenderObject(BuildContext context, covariant _MoonChartXLabelRenderBox renderObject) {
 
-    debugPrint('x label repaint');
-
     bool isChanged = false;
 
     if (!const ListEquality().equals(renderObject.chartPointGroup, chartPointGroup)) {
@@ -106,8 +104,6 @@ class _MoonChartXLabelRenderBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-
-    debugPrint('x label paint');
 
     var canvas = context.canvas;
     var paint = ui.Paint()
