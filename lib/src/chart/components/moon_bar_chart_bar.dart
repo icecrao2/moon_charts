@@ -36,13 +36,7 @@ class _MoonBarChartBar extends LeafRenderObjectWidget {
   void updateRenderObject(BuildContext context, covariant _MoonBarChartBarRenderBox renderObject) {
 
     bool isChanged = false;
-    bool isAnimationReady = false;
 
-    if(renderObject.nodeGroup != nodeGroup) {
-      renderObject.oldNodeGroup = renderObject.nodeGroup.map((e) => e).toList();
-      renderObject.nodeGroup = nodeGroup.map((e) => e).toList();
-      isAnimationReady = true;
-    }
     if(renderObject.barStyle != barStyle) {
       renderObject.barStyle = barStyle;
       isChanged = true;
@@ -55,11 +49,13 @@ class _MoonBarChartBar extends LeafRenderObjectWidget {
       renderObject.maxY = maxY;
       isChanged = true;
     }
-
     if(isChanged) {
       renderObject.markNeedsLayout();
     }
-    if(isAnimationReady) {
+
+    if(renderObject.nodeGroup != nodeGroup) {
+      renderObject.oldNodeGroup = renderObject.nodeGroup.map((e) => e).toList();
+      renderObject.nodeGroup = nodeGroup.map((e) => e).toList();
       renderObject.startAnimation();
     }
   }
@@ -154,7 +150,7 @@ class _MoonBarChartBarRenderBox extends RenderBox {
         if(nodeGroup[index].y == 0) {
           path
             ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-            ..lineTo(realScreenX + offset.dx, size.height + offset.dy + 0.01);
+            ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy + 0.01);
         } else {
           path
             ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
@@ -204,9 +200,16 @@ class _MoonBarChartBarRenderBox extends RenderBox {
         : (nodeGroup[index].y));
     double realScreenY = size.height - (y * (size.height / maxY));
 
-    path
-      ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-      ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+    if(nodeGroup[index].y == 0) {
+      path
+        ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
+        ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy + 0.01);
+    } else {
+      path
+        ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
+        ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+    }
+
 
     circlePath.addOval(Rect.fromCircle(
         center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),

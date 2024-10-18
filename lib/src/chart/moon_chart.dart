@@ -94,7 +94,6 @@ class _MoonChartState extends State<MoonChart> {
 
   @override
   void initState() {
-
     hitXIndex = widget.hitXIndex;
     hitXIndexNotifier = ValueNotifier(hitXIndex);
     super.initState();
@@ -110,7 +109,7 @@ class _MoonChartState extends State<MoonChart> {
       hitXIndexNotifier = ValueNotifier(hitXIndex);
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_chartWidth / 2);
       scrollPoint = scrollPoint.clamp(0.0, _scrollController.position.maxScrollExtent);
-      _scrollController.animateTo(scrollPoint, duration: const Duration(milliseconds: 500), curve: Curves.linear);
+      _scrollController.animateTo(scrollPoint, duration: widget.style.animationDuration, curve: Curves.linear);
     }
   }
 

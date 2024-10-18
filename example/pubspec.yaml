@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  moon_graphs:
+  moon_charts:
     path: ..
   cupertino_icons: ^1.0.6
 

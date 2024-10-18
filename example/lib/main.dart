@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:moon_graphs/moon_charts.dart';
+import 'package:moon_charts/moon_charts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -60,12 +60,33 @@ class _MyHomePageState extends State<MyHomePage> {
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
       ];
     } else {
       List.generate(chartPointGroup.length, (index) {
         chartPointGroup[index] = MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble());
       });
     }
+  }
+
+  void getZeroChart() {
+    List.generate(chartPointGroup.length, (index) {
+      chartPointGroup[index] = MoonChartPointUIModel(x: '3', y: 0);
+    });
   }
 
   @override
@@ -174,7 +195,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         setState(() {
                           getRandomChart();
-                          _hitIndex = 0;
+                          _hitIndex = Random().nextInt(25);
+                        });
+                      },
+                      child: const Text('aa')
+                  ),
+
+                  ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          getZeroChart();
+                          _hitIndex = Random().nextInt(25);
                         });
                       },
                       child: const Text('aa')

@@ -21,7 +21,7 @@
 
 ## 3.0.2
 
-* bar chart bug fix
+* fix bar chart bug
 
 ## 3.0.3
 
@@ -34,3 +34,7 @@
 ## 3.0.6
 
 * add scroll animation
+
+## 3.0.7
+
+* fix bar chart bug

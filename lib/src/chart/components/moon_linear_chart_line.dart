@@ -37,13 +37,7 @@ class _MoonLinearChartLine extends LeafRenderObjectWidget {
   void updateRenderObject(BuildContext context, covariant _MoonBarChartLineRenderBox renderObject) {
 
     bool isChanged = false;
-    bool isAnimationReady = false;
 
-    if(renderObject.nodeGroup != nodeGroup) {
-      renderObject.oldNodeGroup = renderObject.nodeGroup.map((e) => e).toList();
-      renderObject.nodeGroup = nodeGroup.map((e) => e).toList();
-      isAnimationReady = true;
-    }
     if(renderObject.lineStyle != lineStyle) {
       renderObject.lineStyle = lineStyle;
       isChanged = true;
@@ -56,13 +50,16 @@ class _MoonLinearChartLine extends LeafRenderObjectWidget {
       renderObject.maxY = maxY;
       isChanged = true;
     }
-
     if(isChanged) {
       renderObject.markNeedsLayout();
     }
-    if(isAnimationReady) {
+
+    if(renderObject.nodeGroup != nodeGroup) {
+      renderObject.oldNodeGroup = renderObject.nodeGroup.map((e) => e).toList();
+      renderObject.nodeGroup = nodeGroup.map((e) => e).toList();
       renderObject.startAnimation();
     }
+
   }
 }
 
