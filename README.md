@@ -6,8 +6,7 @@ Whether you're visualizing data trends over time or comparing categories, Moon G
 With its intuitive API, you can quickly generate dynamic and visually appealing graphs that enhance the storytelling of your data. <br />
 Perfect for developers and data analysts looking to add a polished, animated touch to their presentations and reports. <br />
 
-![Group 10.png](Group%2010.png)
-![Group 11.png](Group%2011.png)
+![video.gif](video.gif)
 
 ## Getting started
 

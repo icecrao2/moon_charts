@@ -104,6 +104,7 @@ class _MoonBarChartBarRenderBox extends RenderBox {
     } else {
       _progress = elapsed.inMilliseconds / barStyle.animationDuration.inMilliseconds;
     }
+
     markNeedsPaint();
   }
 

@@ -278,12 +278,12 @@ class _MoonChartState extends State<MoonChart> {
                       height: _chartHeight,
                       width: _yAxisWidth,
                       child: _MoonChartYLabel(
-                          maxY: widget.yAxisLabelStyle.max,
-                          yAxisScale: _yAxisScale,
-                          yAxisUnitHeight: _yAxisUnitHeight,
-                          xAxisLabelPrecision: widget.yAxisLabelStyle.labelPrecision,
-                          xAxisLabelSuffixUnit: widget.yAxisLabelStyle.labelSuffixUnit,
-                          textStyle: widget.yAxisLabelStyle.textStyle
+                        maxY: widget.yAxisLabelStyle.max,
+                        yAxisScale: _yAxisScale,
+                        yAxisUnitHeight: _yAxisUnitHeight,
+                        xAxisLabelPrecision: widget.yAxisLabelStyle.labelPrecision,
+                        xAxisLabelSuffixUnit: widget.yAxisLabelStyle.labelSuffixUnit,
+                        textStyle: widget.yAxisLabelStyle.textStyle
                       ),
                     )
                 ),
