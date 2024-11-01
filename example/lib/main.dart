@@ -142,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: MoonChart.barChart(
                   chartPointGroup: chartPointGroup,
                   hitXIndex: _hitIndex,
+                  isShowingSelectedYValue: true,
                   onChangeSelectedIndex: (index) {
                     _hitIndex = index;
                   },
@@ -161,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   style: const MoonChartBarStyleUIModel.fromDefault(),
                   yAxisLabelStyle: const MoonChartYLabelStyleUIModel(
-                      max: 120,
+                      max: 100,
                       labelCount: 5,
                       labelPrecision: 0,
                       labelSuffixUnit: "",
