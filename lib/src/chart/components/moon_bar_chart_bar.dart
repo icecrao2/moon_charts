@@ -149,18 +149,30 @@ class _MoonBarChartBarRenderBox extends RenderBox {
         double realScreenY = size.height - (y * (size.height / maxY));
 
         if(nodeGroup[index].y == 0) {
-          path
-            ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-            ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy + 0.01);
+          // path
+          //   ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
+          //   ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy + 0.01);
         } else {
           path
             ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
             ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+
+          // circlePath.addOval(Rect.fromCircle(
+          //     center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
+          //     radius: paint.strokeWidth / 2));
+
+          circlePath.addArc(
+            Rect.fromCircle(
+              center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
+              radius: paint.strokeWidth / 2,
+            ),
+            math.pi,
+            math.pi,
+          );
+
         }
 
-        circlePath.addOval(Rect.fromCircle(
-            center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
-            radius: paint.strokeWidth / 2));
+
       }
 
       canvas.drawPath(path, paint);
@@ -202,19 +214,27 @@ class _MoonBarChartBarRenderBox extends RenderBox {
     double realScreenY = size.height - (y * (size.height / maxY));
 
     if(nodeGroup[index].y == 0) {
-      path
-        ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-        ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy + 0.01);
+      // path
+      //   ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
+      //   ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy + 0.01);
     } else {
       path
         ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
         ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+
+
+      circlePath.addArc(
+        Rect.fromCircle(
+          center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
+          radius: paint.strokeWidth / 2,
+        ),
+        math.pi,
+        math.pi,
+      );
     }
 
 
-    circlePath.addOval(Rect.fromCircle(
-        center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
-        radius: paint.strokeWidth / 2));
+
 
     canvas.drawPath(path, paint);
     canvas.drawPath(circlePath, circlePaint);

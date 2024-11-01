@@ -38,3 +38,11 @@
 ## 3.0.7
 
 * fix bar chart bug
+
+## 3.0.10
+
+* remove bar chart zero data display
+
+## 3.0.11
+
+* change bar chart circle
