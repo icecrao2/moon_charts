@@ -138,29 +138,38 @@ class _MoonBarChartBarRenderBox extends RenderBox {
       int length = math.min(oldNodeGroup.length, nodeGroup.length);
 
       for (int index = 0; index < nodeGroup.length; index++) {
+
+        if(nodeGroup[index].y == null) {
+          continue;
+        }
+
+
         double realScreenX = index * size.width / nodeGroup.length;
 
-        double newDifference = index < length ? nodeGroup[index].y - oldNodeGroup[index].y : 0;
+        double newDifference = index < length ? nodeGroup[index].y! - oldNodeGroup[index].y! : 0;
         double y = oldNodeGroup.isEmpty
-            ? nodeGroup[index].y
+            ? nodeGroup[index].y!
             : (oldNodeGroup.length > index
-            ? (oldNodeGroup[index].y + newDifference * _progress)
-            : (nodeGroup[index].y));
+            ? (oldNodeGroup[index].y! + newDifference * _progress)
+            : (nodeGroup[index].y!));
         double realScreenY = size.height - (y * (size.height / maxY));
 
-        if(nodeGroup[index].y == 0) {
-          path
-            ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-            ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy + 0.01);
-        } else {
+        if(nodeGroup[index].y != 0) {
           path
             ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
             ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+
+          circlePath.addArc(
+            Rect.fromCircle(
+              center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
+              radius: paint.strokeWidth / 2,
+            ),
+            math.pi,
+            math.pi,
+          );
         }
 
-        circlePath.addOval(Rect.fromCircle(
-            center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
-            radius: paint.strokeWidth / 2));
+
       }
 
       canvas.drawPath(path, paint);
@@ -191,30 +200,38 @@ class _MoonBarChartBarRenderBox extends RenderBox {
 
     int index = hitXIndex;
 
+    if(nodeGroup[index].y == null) {
+      return;
+    }
+
     double realScreenX = index * size.width / nodeGroup.length;
 
-    double newDifference = index < length ? nodeGroup[index].y - oldNodeGroup[index].y : 0;
+    double newDifference = index < length ? nodeGroup[index].y! - oldNodeGroup[index].y! : 0;
     double y = oldNodeGroup.isEmpty
-        ? nodeGroup[index].y
+        ? nodeGroup[index].y!
         : (oldNodeGroup.length > index
-        ? (oldNodeGroup[index].y + newDifference * _progress)
-        : (nodeGroup[index].y));
+        ? (oldNodeGroup[index].y! + newDifference * _progress)
+        : (nodeGroup[index].y!));
     double realScreenY = size.height - (y * (size.height / maxY));
 
-    if(nodeGroup[index].y == 0) {
-      path
-        ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-        ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy + 0.01);
-    } else {
+    if(nodeGroup[index].y != 0) {
       path
         ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
         ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+
+
+      circlePath.addArc(
+        Rect.fromCircle(
+          center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
+          radius: paint.strokeWidth / 2,
+        ),
+        math.pi,
+        math.pi,
+      );
     }
 
 
-    circlePath.addOval(Rect.fromCircle(
-        center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
-        radius: paint.strokeWidth / 2));
+
 
     canvas.drawPath(path, paint);
     canvas.drawPath(circlePath, circlePaint);
@@ -235,9 +252,11 @@ class _MoonBarChartBarRenderBox extends RenderBox {
 
       int index = ((tapPosition.dx / width) * nodeGroup.length).round();
 
-      _downIndexMemory = index;
-
       _pointerDown = true;
+
+      if(nodeGroup[index].y == null) { return; }
+
+      _downIndexMemory = index;
 
     } else if(event is PointerMoveEvent && _pointerDown) {
 

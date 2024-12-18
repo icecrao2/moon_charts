@@ -40,11 +40,11 @@ class _MyHomePageState extends State<MyHomePage> {
       chartPointGroup = [
         MoonChartPointUIModel(x: '3', y: 0),
         MoonChartPointUIModel(x: '3', y: 10),
-        MoonChartPointUIModel(x: '3', y: 0),
-        MoonChartPointUIModel(x: '3', y: 10),
-        MoonChartPointUIModel(x: '3', y: 0),
+        MoonChartPointUIModel(x: '3', y: null),
         MoonChartPointUIModel(x: '3', y: 10),
 
+        MoonChartPointUIModel(x: '4', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '5ss', y: null),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
@@ -62,9 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
-        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
-        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
-        MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
+        MoonChartPointUIModel(x: '5s', y: null),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
         MoonChartPointUIModel(x: '3', y: Random().nextInt(100).toDouble()),
@@ -144,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: MoonChart.barChart(
                   chartPointGroup: chartPointGroup,
                   hitXIndex: _hitIndex,
+                  isShowingSelectedYValue: true,
                   onChangeSelectedIndex: (index) {
                     _hitIndex = index;
                   },
@@ -163,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   style: const MoonChartBarStyleUIModel.fromDefault(),
                   yAxisLabelStyle: const MoonChartYLabelStyleUIModel(
-                      max: 120,
+                      max: 100,
                       labelCount: 5,
                       labelPrecision: 0,
                       labelSuffixUnit: "",

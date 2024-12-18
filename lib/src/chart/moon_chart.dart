@@ -208,7 +208,7 @@ class _MoonChartState extends State<MoonChart> {
                               top: widget.backgroundCardPadding.top,
                               left: _yAxisWidth + ((_itemWidth + _itemBetweenPadding) * hitXIndex),
                               child:  Text(
-                                widget.chartPointGroup[hitXIndex].y.toStringAsFixed(2),
+                                widget.chartPointGroup[hitXIndex].y?.toStringAsFixed(2) ?? "",
                                 style: const TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600
