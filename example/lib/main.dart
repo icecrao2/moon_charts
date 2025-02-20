@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
 
               Container(
-                // width: 300,
+                width: 300,
                 height: 300,
                 alignment: Alignment.center,
                 child: MoonChart.linearChart(
