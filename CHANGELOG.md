@@ -46,3 +46,7 @@
 ## 3.0.11
 
 * change bar chart circle
+
+## 3.0.13
+
+* fix chart scroll width bug

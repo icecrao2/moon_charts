@@ -167,14 +167,14 @@ class _MoonChartState extends State<MoonChart> {
             ),
             child: Stack(
               children: [
-
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   controller: _scrollController,
                   child: Stack(
                     children: [
+
                       SizedBox(
-                        width: _scrollWidthMySelf,
+                        width: (widget.chartPointGroup.length * (_itemWidth + _itemBetweenPadding)) + _yAxisWidth + _itemBetweenPadding,
                         height: _heightMySelf,
                       ),
 
