@@ -22,3 +22,4 @@ part 'components/moon_chart_y_label.dart';
 part 'components/moon_linear_chart_line.dart';
 part 'components/moon_chart_legend.dart';
 part 'components/moon_chart_x_label.dart';
+part 'components/base_chart_render_box.dart';

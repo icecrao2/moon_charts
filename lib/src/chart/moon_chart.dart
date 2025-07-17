@@ -20,6 +20,8 @@ class MoonChart extends StatefulWidget {
   final MoonChartXLabelStyleUIModel xAxisLabelStyle;
   final MoonChartStyle style;
 
+  final Color backgroundColor;
+
   const MoonChart.linearChart({
     super.key,
     required this.chartPointGroup,
@@ -39,6 +41,7 @@ class MoonChart extends StatefulWidget {
       spreadRadius: 0.1,
       offset: Offset(2, 2)
     ),
+    this.backgroundColor = Colors.white
   });
 
   const MoonChart.barChart({
@@ -60,6 +63,7 @@ class MoonChart extends StatefulWidget {
         spreadRadius: 0.1,
         offset: Offset(2, 2)
     ),
+    this.backgroundColor = Colors.white
   });
 
 
@@ -97,6 +101,12 @@ class _MoonChartState extends State<MoonChart> {
     hitXIndex = widget.hitXIndex;
     hitXIndexNotifier = ValueNotifier(hitXIndex);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -141,8 +151,6 @@ class _MoonChartState extends State<MoonChart> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -155,10 +163,10 @@ class _MoonChartState extends State<MoonChart> {
           return Container(
             padding: widget.backgroundCardPadding,
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: widget.backgroundColor,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: const Color.fromRGBO(223, 230, 238, 1),
+                  color: widget.backgroundColor,
                   width: 1,
                 ),
                 boxShadow:[
@@ -265,7 +273,7 @@ class _MoonChartState extends State<MoonChart> {
                     bottom: 0,
                     left: 0,
                     child: Container(
-                      color: Colors.white,
+                      color: Colors.transparent,
                       width: _yAxisWidth,
                       height: _heightMySelf,
                     )
@@ -283,7 +291,8 @@ class _MoonChartState extends State<MoonChart> {
                         yAxisUnitHeight: _yAxisUnitHeight,
                         xAxisLabelPrecision: widget.yAxisLabelStyle.labelPrecision,
                         xAxisLabelSuffixUnit: widget.yAxisLabelStyle.labelSuffixUnit,
-                        textStyle: widget.yAxisLabelStyle.textStyle
+                        textStyle: widget.yAxisLabelStyle.textStyle,
+                        backgroundColor: widget.backgroundColor,
                       ),
                     )
                 ),

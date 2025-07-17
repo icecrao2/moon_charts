@@ -1,17 +1,13 @@
-
-
 part of chart_library;
 
-
-
 class _MoonChartYLabel extends LeafRenderObjectWidget {
-
   final TextStyle textStyle;
   final double maxY;
   final double yAxisScale;
   final int xAxisLabelPrecision;
   final String xAxisLabelSuffixUnit;
   final double yAxisUnitHeight;
+  final Color backgroundColor;
 
   const _MoonChartYLabel({
     required this.textStyle,
@@ -19,7 +15,8 @@ class _MoonChartYLabel extends LeafRenderObjectWidget {
     required this.yAxisScale,
     required this.xAxisLabelPrecision,
     required this.xAxisLabelSuffixUnit,
-    required this.yAxisUnitHeight
+    required this.yAxisUnitHeight,
+    required this.backgroundColor
   });
 
   @override
@@ -30,7 +27,8 @@ class _MoonChartYLabel extends LeafRenderObjectWidget {
       yAxisScale: yAxisScale,
       xAxisLabelPrecision: xAxisLabelPrecision,
       xAxisLabelSuffixUnit: xAxisLabelSuffixUnit,
-      yAxisUnitHeight: yAxisUnitHeight
+      yAxisUnitHeight: yAxisUnitHeight,
+      backgroundColor: backgroundColor
     );
   }
 
@@ -94,7 +92,7 @@ class _MoonChartYLabelRenderBox extends RenderBox {
   int xAxisLabelPrecision;
   String xAxisLabelSuffixUnit;
   double yAxisUnitHeight;
-
+  Color backgroundColor;
 
   _MoonChartYLabelRenderBox({
     required this.textStyle,
@@ -103,6 +101,7 @@ class _MoonChartYLabelRenderBox extends RenderBox {
     required this.xAxisLabelPrecision,
     required this.xAxisLabelSuffixUnit,
     required this.yAxisUnitHeight,
+    required this.backgroundColor
   }) {
     _textPainter = TextPainter(textDirection: TextDirection.ltr, textAlign: TextAlign.center);
   }
@@ -116,7 +115,7 @@ class _MoonChartYLabelRenderBox extends RenderBox {
   void paint(PaintingContext context, Offset offset) {
     var canvas = context.canvas;
 
-    final Paint paint = Paint()..color = Colors.white;
+    final Paint paint = Paint()..color = backgroundColor;
     canvas.drawRect(offset & size, paint);
 
     List.generate((maxY / yAxisScale).ceil() + 1, (index) {
