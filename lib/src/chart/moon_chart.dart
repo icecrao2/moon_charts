@@ -73,7 +73,6 @@ class MoonChart extends StatefulWidget {
 
 
 class _MoonChartState extends State<MoonChart> {
-
   double _widthMySelf = 0;
   double _heightMySelf = 0;
   final ScrollController _scrollController = ScrollController();
@@ -95,17 +94,17 @@ class _MoonChartState extends State<MoonChart> {
   late int hitXIndex;
   late ValueNotifier<int> hitXIndexNotifier;
 
-
   @override
   void initState() {
+    super.initState();
     hitXIndex = widget.hitXIndex;
     hitXIndexNotifier = ValueNotifier(hitXIndex);
-    super.initState();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    hitXIndexNotifier.dispose();
     super.dispose();
   }
 
@@ -155,23 +154,16 @@ class _MoonChartState extends State<MoonChart> {
   Widget build(BuildContext context) {
 
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-
+        builder: (context, constraints) {
           _widthMySelf = constraints.maxWidth;
           _heightMySelf = constraints.maxHeight;
-
           return Container(
             padding: widget.backgroundCardPadding,
             decoration: BoxDecoration(
-                color: widget.backgroundColor,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: widget.backgroundColor,
-                  width: 1,
-                ),
-                boxShadow:[
-                  widget.backgroundBoxShadow
-                ]
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color.fromRGBO(223, 230, 238, 1), width: 1),
+              boxShadow: [widget.backgroundBoxShadow],
             ),
             child: Stack(
               children: [
@@ -180,33 +172,27 @@ class _MoonChartState extends State<MoonChart> {
                   controller: _scrollController,
                   child: Stack(
                     children: [
-
-                      SizedBox(
-                        width: (widget.chartPointGroup.length * (_itemWidth + _itemBetweenPadding)) + _yAxisWidth + _itemBetweenPadding,
-                        height: _heightMySelf,
-                      ),
-
+                      SizedBox(width: _scrollWidthMySelf, height: _heightMySelf),
                       Positioned(
-                          bottom: 0,
-                          left: _yAxisWidth + _itemBetweenPadding,
-                          child: SizedBox(
-                              height: _xAxisHeight,
-                              width: _scrollWidthMySelf,
-                              child: ValueListenableBuilder(
-                                valueListenable: hitXIndexNotifier,
-                                builder: (_, hitXIndex, __) {
-                                  return _MoonChartXLabel(
-                                      chartPointGroup: widget.chartPointGroup,
-                                      labelWidth: _itemWidth + _itemBetweenPadding,
-                                      hitXIndex: hitXIndex,
-                                      selectedTextStyle: widget.xAxisLabelStyle.selectedTextStyle,
-                                      unSelectedTextStyle: widget.xAxisLabelStyle.unSelectedTextStyle
-                                  );
-                                },
-                              )
-                          )
+                        bottom: 0,
+                        left: _yAxisWidth + _itemBetweenPadding,
+                        child: SizedBox(
+                          height: _xAxisHeight,
+                          width: _scrollWidthMySelf,
+                          child: ValueListenableBuilder(
+                            valueListenable: hitXIndexNotifier,
+                            builder: (_, hitXIndex, __) {
+                              return _MoonChartXLabel(
+                                chartPointGroup: widget.chartPointGroup,
+                                labelWidth: _itemWidth + _itemBetweenPadding,
+                                hitXIndex: hitXIndex,
+                                selectedTextStyle: widget.xAxisLabelStyle.selectedTextStyle,
+                                unSelectedTextStyle: widget.xAxisLabelStyle.unSelectedTextStyle,
+                              );
+                            },
+                          ),
+                        ),
                       ),
-
                       Visibility(
                         visible: widget.isShowingSelectedYValue,
                         child: ValueListenableBuilder(
@@ -215,18 +201,14 @@ class _MoonChartState extends State<MoonChart> {
                             return Positioned(
                               top: widget.backgroundCardPadding.top,
                               left: _yAxisWidth + ((_itemWidth + _itemBetweenPadding) * hitXIndex),
-                              child:  Text(
+                              child: Text(
                                 widget.chartPointGroup[hitXIndex].y?.toStringAsFixed(2) ?? "",
-                                style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600
-                                ),
+                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
                               ),
                             );
-                          }
+                          },
                         ),
                       ),
-
                       ValueListenableBuilder(
                         valueListenable: hitXIndexNotifier,
                         builder: (_, hitXIndex, __) {
@@ -236,33 +218,31 @@ class _MoonChartState extends State<MoonChart> {
                             child: SizedBox(
                               height: _chartHeight,
                               child: _MoonChartSelectedYAxis(line: widget.selectedDottedLineUIModel),
-                            )
-                          );
-                        }
-                      ),
-
-                      Positioned(
-                          bottom: _xAxisHeight,
-                          left: _yAxisWidth + (_itemWidth / 2),
-                          child: SizedBox(
-                            width: _scrollWidthMySelf - _itemWidth - _itemBetweenPadding,
-                            height: _chartHeight,
-                            child: _MoonChartYAxisGroup(
-                              tapAreaCount: widget.chartPointGroup.length,
-                              tapAreaWidth: _itemWidth,
-                              tapAreaRightPadding: _itemBetweenPadding,
-                              line: widget.unSelectedDottedLineUIModel,
                             ),
-                          )
+                          );
+                        },
                       ),
-
                       Positioned(
                         bottom: _xAxisHeight,
                         left: _yAxisWidth + (_itemWidth / 2),
                         child: SizedBox(
                           width: _scrollWidthMySelf - _itemWidth - _itemBetweenPadding,
                           height: _chartHeight,
-                          child: getChart()!
+                          child: _MoonChartYAxisGroup(
+                            tapAreaCount: widget.chartPointGroup.length,
+                            tapAreaWidth: _itemWidth,
+                            tapAreaRightPadding: _itemBetweenPadding,
+                            line: widget.unSelectedDottedLineUIModel,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: _xAxisHeight,
+                        left: _yAxisWidth + (_itemWidth / 2),
+                        child: SizedBox(
+                          width: _scrollWidthMySelf - _itemWidth - _itemBetweenPadding,
+                          height: _chartHeight,
+                          child: getChart()!,
                         ),
                       ),
                     ],

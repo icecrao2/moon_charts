@@ -1,11 +1,6 @@
-
-
 part of chart_library;
 
-
-
 class _MoonBarChartBar extends LeafRenderObjectWidget {
-
   final List<MoonChartPointUIModel> nodeGroup;
   final MoonChartBarStyleUIModel barStyle;
   final int hitXIndex;
@@ -17,267 +12,125 @@ class _MoonBarChartBar extends LeafRenderObjectWidget {
     required this.hitXIndex,
     required this.barStyle,
     required this.maxY,
-    required this.onPressed
+    required this.onPressed,
   });
 
   @override
   RenderObject createRenderObject(BuildContext context) {
     return _MoonBarChartBarRenderBox(
-      nodeGroup: nodeGroup.map((e) => e).toList(),
-      oldNodeGroup: nodeGroup.map((e) => e).toList(),
+      nodeGroup: nodeGroup.toList(),
+      oldNodeGroup: nodeGroup.toList(),
       hitXIndex: hitXIndex,
       barStyle: barStyle,
       maxY: maxY,
-      onPressed: onPressed
+      onPressed: onPressed,
     );
   }
 
   @override
   void updateRenderObject(BuildContext context, covariant _MoonBarChartBarRenderBox renderObject) {
-
     bool isChanged = false;
-
-    if(renderObject.barStyle != barStyle) {
-      renderObject.barStyle = barStyle;
+    if (renderObject.style != barStyle) {
+      renderObject.style = barStyle;
       isChanged = true;
     }
-    if(renderObject.hitXIndex != hitXIndex) {
+    if (renderObject.hitXIndex != hitXIndex) {
       renderObject.hitXIndex = hitXIndex;
       isChanged = true;
     }
-    if(renderObject.maxY != maxY) {
+    if (renderObject.maxY != maxY) {
       renderObject.maxY = maxY;
       isChanged = true;
     }
-    if(isChanged) {
+    if (isChanged) {
       renderObject.markNeedsLayout();
     }
-
-    if(renderObject.nodeGroup != nodeGroup) {
-      renderObject.oldNodeGroup = renderObject.nodeGroup.map((e) => e).toList();
-      renderObject.nodeGroup = nodeGroup.map((e) => e).toList();
+    if (renderObject.nodeGroup != nodeGroup) {
+      renderObject.oldNodeGroup = List.from(renderObject.nodeGroup);
+      renderObject.nodeGroup = nodeGroup.toList();
       renderObject.startAnimation();
     }
   }
 }
 
-class _MoonBarChartBarRenderBox extends RenderBox {
-
-  late Ticker _ticker;
-  double _progress = 0.0;
-  bool _pointerDown = false;
-  int _downIndexMemory = 0;
-  double _tapDownPosition = 0;
-
-  Function(int index) onPressed;
-  List<MoonChartPointUIModel> nodeGroup;
-  List<MoonChartPointUIModel> oldNodeGroup;
-  MoonChartBarStyleUIModel barStyle;
-  int hitXIndex;
-  double maxY;
-
+class _MoonBarChartBarRenderBox extends _MoonChartRenderBoxBase<MoonChartBarStyleUIModel> {
   _MoonBarChartBarRenderBox({
-    required this.nodeGroup,
-    required this.oldNodeGroup,
-    required this.hitXIndex,
-    required this.barStyle,
-    required this.maxY,
-    required this.onPressed
-  }) {
-    _downIndexMemory = hitXIndex;
-    _ticker = Ticker(_tick);
-    _ticker.start();
-  }
-
-  void startAnimation() {
-    if(_ticker.isTicking) {
-      _ticker.stop();
-    }
-    _progress = 0;
-    _ticker.start();
-  }
-
-  void _tick(Duration elapsed) {
-    if (elapsed.inMilliseconds >= barStyle.animationDuration.inMilliseconds) {
-      _progress = 1.0;
-      _ticker.stop();
-    } else {
-      _progress = elapsed.inMilliseconds / barStyle.animationDuration.inMilliseconds;
-    }
-
-    markNeedsPaint();
-  }
-
-  @override
-  void detach() {
-    _ticker.dispose();
-    super.detach();
-  }
-
-  @override
-  void performLayout() {
-    size = constraints.biggest;
-  }
+    required super.nodeGroup,
+    required super.oldNodeGroup,
+    required super.hitXIndex,
+    required MoonChartBarStyleUIModel barStyle,
+    required super.maxY,
+    required super.onPressed,
+  }) : super(
+    style: barStyle,
+  );
 
   @override
   void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
-    final paint = Paint()
-      ..strokeWidth = barStyle.lineWidth
+    final Paint paint = Paint()
+      ..strokeWidth = style.lineWidth
       ..style = PaintingStyle.stroke
-      ..color = barStyle.unSelectedColor;
-
-    final circlePaint = Paint()
+      ..color = style.unSelectedColor;
+    final Paint circlePaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = barStyle.unSelectedColor;
-
-    final Path circlePath = Path();
+      ..color = style.unSelectedColor;
     final Path path = Path();
+    final Path circlePath = Path();
 
     if (nodeGroup.isNotEmpty) {
-      int length = math.min(oldNodeGroup.length, nodeGroup.length);
-
       for (int index = 0; index < nodeGroup.length; index++) {
-
-        if(nodeGroup[index].y == null) {
+        if (nodeGroup[index].y == null) {
           continue;
         }
-
-
         double realScreenX = index * size.width / nodeGroup.length;
-
-        double newDifference = index < length ? nodeGroup[index].y! - oldNodeGroup[index].y! : 0;
-        double y = oldNodeGroup.isEmpty
-            ? nodeGroup[index].y!
-            : (oldNodeGroup.length > index
-            ? (oldNodeGroup[index].y! + newDifference * _progress)
-            : (nodeGroup[index].y!));
-        double realScreenY = size.height - (y * (size.height / maxY));
-
-        if(nodeGroup[index].y != 0) {
-          path
-            ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-            ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
-
+        double yValue = _interpolateValue(index);
+        double realScreenY = size.height - (yValue * (size.height / maxY));
+        if (nodeGroup[index].y != 0) {
+          path.moveTo(realScreenX + offset.dx, size.height + offset.dy);
+          path.lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
           circlePath.addArc(
-            Rect.fromCircle(
-              center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
-              radius: paint.strokeWidth / 2,
-            ),
+            Rect.fromCircle(center: Offset(realScreenX + offset.dx, realScreenY + offset.dy), radius: paint.strokeWidth / 2),
             math.pi,
             math.pi,
           );
         }
-
-
       }
-
       canvas.drawPath(path, paint);
       canvas.drawPath(circlePath, circlePaint);
-
-      _paintSelectedBar(context,offset);
+      _paintSelectedBar(context, offset);
     }
   }
 
-
   void _paintSelectedBar(PaintingContext context, Offset offset) {
-
     final Canvas canvas = context.canvas;
-    int length = math.min(oldNodeGroup.length, nodeGroup.length);
-
-    final paint = Paint()
-      ..strokeWidth = barStyle.lineWidth
+    final Paint paint = Paint()
+      ..strokeWidth = style.lineWidth
       ..style = PaintingStyle.stroke
-      ..color = barStyle.selectedColor;
-
-    final circlePaint = Paint()
+      ..color = style.selectedColor;
+    final Paint circlePaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = barStyle.selectedColor;
-
-    final Path circlePath = Path();
+      ..color = style.selectedColor;
     final Path path = Path();
-
-
+    final Path circlePath = Path();
     int index = hitXIndex;
-
-    if(nodeGroup[index].y == null) {
+    if (nodeGroup[index].y == null) {
       return;
     }
-
-    double realScreenX = index * size.width / nodeGroup.length;
-
-    double newDifference = index < length ? nodeGroup[index].y! - oldNodeGroup[index].y! : 0;
-    double y = oldNodeGroup.isEmpty
-        ? nodeGroup[index].y!
-        : (oldNodeGroup.length > index
-        ? (oldNodeGroup[index].y! + newDifference * _progress)
-        : (nodeGroup[index].y!));
-    double realScreenY = size.height - (y * (size.height / maxY));
-
-    if(nodeGroup[index].y != 0) {
-      path
-        ..moveTo(realScreenX + offset.dx, size.height + offset.dy)
-        ..lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
-
-
-      circlePath.addArc(
-        Rect.fromCircle(
-          center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
-          radius: paint.strokeWidth / 2,
-        ),
-        math.pi,
-        math.pi,
-      );
+    if (nodeGroup[index].y == 0) {
+      return;
     }
-
-
-
-
+    double yValue = _interpolateValue(index);
+    double realScreenX = index * size.width / nodeGroup.length;
+    double realScreenY = size.height - (yValue * (size.height / maxY));
+    path.moveTo(realScreenX + offset.dx, size.height + offset.dy);
+    path.lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+    circlePath.addArc(
+      Rect.fromCircle(center: Offset(realScreenX + offset.dx, realScreenY + offset.dy), radius: paint.strokeWidth / 2),
+      math.pi,
+      math.pi,
+    );
     canvas.drawPath(path, paint);
     canvas.drawPath(circlePath, circlePaint);
   }
-
-  @override
-  bool hitTestSelf(Offset position) => true;
-
-  @override
-  void handleEvent(PointerEvent event, HitTestEntry entry) {
-
-    if (event is PointerDownEvent) {
-
-      Offset tapPosition = event.localPosition;
-      _tapDownPosition = event.localPosition.dx;
-
-      double width = (barStyle.itemBetweenPadding + barStyle.touchAreaWidth) * nodeGroup.length;
-
-      int index = ((tapPosition.dx / width) * nodeGroup.length).round();
-
-      _pointerDown = true;
-
-      if(nodeGroup[index].y == null) { return; }
-
-      _downIndexMemory = index;
-
-    } else if(event is PointerMoveEvent && _pointerDown) {
-
-      if((_tapDownPosition - event.localPosition.dx).abs() > 5) {
-        _downIndexMemory = hitXIndex;
-
-        _pointerDown = false;
-      }
-
-    } else if(event is PointerUpEvent && _pointerDown) {
-
-      hitXIndex = _downIndexMemory;
-
-      _pointerDown = false;
-
-      onPressed(hitXIndex);
-
-      markNeedsPaint();
-    }
-  }
-
-  @override
-  bool get isRepaintBoundary => true;
 }
