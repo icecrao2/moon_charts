@@ -1,11 +1,6 @@
-
-
-part of chart_library;
-
-
+part of '../chart_lib.dart';
 
 class _MoonChartSelectedYAxis extends StatelessWidget {
-
   final MoonDottedLineUIModel line;
 
   const _MoonChartSelectedYAxis({
@@ -14,25 +9,25 @@ class _MoonChartSelectedYAxis extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return RepaintBoundary(
       child: CustomPaint(
-        painter: _MoonChartSelectedYAxisCustomPainter(line: line,),
+        painter: _MoonChartSelectedYAxisCustomPainter(
+          line: line,
+        ),
       ),
     );
   }
 }
 
-
 class _MoonChartSelectedYAxisCustomPainter extends CustomPainter {
-
   MoonDottedLineUIModel line;
 
-  _MoonChartSelectedYAxisCustomPainter({required this.line,});
+  _MoonChartSelectedYAxisCustomPainter({
+    required this.line,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-
     var paint = ui.Paint()
       ..color = line.dotColor
       ..strokeWidth = line.dotWidth

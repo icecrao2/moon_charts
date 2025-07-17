@@ -1,11 +1,6 @@
-
-
-part of chart_library;
-
-
+part of '../chart_lib.dart';
 
 class _MoonChartXLabel extends LeafRenderObjectWidget {
-
   final List<MoonChartPointUIModel> chartPointGroup;
   final TextStyle unSelectedTextStyle;
   final TextStyle selectedTextStyle;
@@ -23,17 +18,15 @@ class _MoonChartXLabel extends LeafRenderObjectWidget {
   @override
   RenderObject createRenderObject(BuildContext context) {
     return _MoonChartXLabelRenderBox(
-      chartPointGroup: chartPointGroup,
-      unSelectedTextStyle: unSelectedTextStyle,
-      selectedTextStyle: selectedTextStyle,
-      hitXIndex: hitXIndex,
-      labelWidth: labelWidth
-    );
+        chartPointGroup: chartPointGroup,
+        unSelectedTextStyle: unSelectedTextStyle,
+        selectedTextStyle: selectedTextStyle,
+        hitXIndex: hitXIndex,
+        labelWidth: labelWidth);
   }
 
   @override
   void updateRenderObject(BuildContext context, covariant _MoonChartXLabelRenderBox renderObject) {
-
     bool isChanged = false;
 
     if (!const ListEquality().equals(renderObject.chartPointGroup, chartPointGroup)) {
@@ -57,7 +50,7 @@ class _MoonChartXLabel extends LeafRenderObjectWidget {
       isChanged = true;
     }
 
-    if(isChanged) {
+    if (isChanged) {
       renderObject.markNeedsLayout();
     }
   }
@@ -79,7 +72,6 @@ class _MoonChartXLabel extends LeafRenderObjectWidget {
 }
 
 class _MoonChartXLabelRenderBox extends RenderBox {
-
   late TextPainter _textPainter;
   List<MoonChartPointUIModel> chartPointGroup;
   TextStyle unSelectedTextStyle;
@@ -104,18 +96,14 @@ class _MoonChartXLabelRenderBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-
     var canvas = context.canvas;
     var paint = ui.Paint()
       ..strokeWidth = 1
       ..color = Colors.black;
 
     List.generate(chartPointGroup.length, (index) {
-
-      _textPainter.text = TextSpan(
-        text: chartPointGroup[index].x,
-        style: hitXIndex == index ? selectedTextStyle : unSelectedTextStyle
-      );
+      _textPainter.text =
+          TextSpan(text: chartPointGroup[index].x, style: hitXIndex == index ? selectedTextStyle : unSelectedTextStyle);
 
       _textPainter.layout(minWidth: 0, maxWidth: constraints.maxWidth);
       _textPainter.paint(canvas, ui.Offset(offset.dx + (labelWidth * index), offset.dy + (_textPainter.height / 2)));

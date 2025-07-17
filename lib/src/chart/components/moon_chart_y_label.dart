@@ -1,42 +1,37 @@
-
-
-part of chart_library;
-
-
+part of '../chart_lib.dart';
 
 class _MoonChartYLabel extends LeafRenderObjectWidget {
-
   final TextStyle textStyle;
   final double maxY;
   final double yAxisScale;
   final int xAxisLabelPrecision;
   final String xAxisLabelSuffixUnit;
   final double yAxisUnitHeight;
+  final Color backgroundColor;
 
-  const _MoonChartYLabel({
-    required this.textStyle,
-    required this.maxY,
-    required this.yAxisScale,
-    required this.xAxisLabelPrecision,
-    required this.xAxisLabelSuffixUnit,
-    required this.yAxisUnitHeight
-  });
+  const _MoonChartYLabel(
+      {required this.textStyle,
+      required this.maxY,
+      required this.yAxisScale,
+      required this.xAxisLabelPrecision,
+      required this.xAxisLabelSuffixUnit,
+      required this.yAxisUnitHeight,
+      required this.backgroundColor});
 
   @override
   RenderObject createRenderObject(BuildContext context) {
     return _MoonChartYLabelRenderBox(
-      textStyle: textStyle,
-      maxY: maxY,
-      yAxisScale: yAxisScale,
-      xAxisLabelPrecision: xAxisLabelPrecision,
-      xAxisLabelSuffixUnit: xAxisLabelSuffixUnit,
-      yAxisUnitHeight: yAxisUnitHeight
-    );
+        textStyle: textStyle,
+        maxY: maxY,
+        yAxisScale: yAxisScale,
+        xAxisLabelPrecision: xAxisLabelPrecision,
+        xAxisLabelSuffixUnit: xAxisLabelSuffixUnit,
+        yAxisUnitHeight: yAxisUnitHeight,
+        backgroundColor: backgroundColor);
   }
 
   @override
   void updateRenderObject(BuildContext context, covariant _MoonChartYLabelRenderBox renderObject) {
-
     bool isChanged = false;
 
     if (renderObject.textStyle != textStyle) {
@@ -59,12 +54,12 @@ class _MoonChartYLabel extends LeafRenderObjectWidget {
       renderObject.xAxisLabelSuffixUnit = xAxisLabelSuffixUnit;
       isChanged = true;
     }
-    if(renderObject.yAxisUnitHeight != yAxisUnitHeight) {
+    if (renderObject.yAxisUnitHeight != yAxisUnitHeight) {
       renderObject.yAxisUnitHeight = yAxisUnitHeight;
       isChanged = true;
     }
 
-    if(isChanged) {
+    if (isChanged) {
       renderObject.markNeedsLayout();
     }
   }
@@ -86,7 +81,6 @@ class _MoonChartYLabel extends LeafRenderObjectWidget {
 }
 
 class _MoonChartYLabelRenderBox extends RenderBox {
-
   late TextPainter _textPainter;
   TextStyle textStyle;
   double maxY;
@@ -94,16 +88,16 @@ class _MoonChartYLabelRenderBox extends RenderBox {
   int xAxisLabelPrecision;
   String xAxisLabelSuffixUnit;
   double yAxisUnitHeight;
+  Color backgroundColor;
 
-
-  _MoonChartYLabelRenderBox({
-    required this.textStyle,
-    required this.maxY,
-    required this.yAxisScale,
-    required this.xAxisLabelPrecision,
-    required this.xAxisLabelSuffixUnit,
-    required this.yAxisUnitHeight,
-  }) {
+  _MoonChartYLabelRenderBox(
+      {required this.textStyle,
+      required this.maxY,
+      required this.yAxisScale,
+      required this.xAxisLabelPrecision,
+      required this.xAxisLabelSuffixUnit,
+      required this.yAxisUnitHeight,
+      required this.backgroundColor}) {
     _textPainter = TextPainter(textDirection: TextDirection.ltr, textAlign: TextAlign.center);
   }
 
@@ -116,16 +110,14 @@ class _MoonChartYLabelRenderBox extends RenderBox {
   void paint(PaintingContext context, Offset offset) {
     var canvas = context.canvas;
 
-    final Paint paint = Paint()..color = Colors.white;
+    final Paint paint = Paint()..color = backgroundColor;
     canvas.drawRect(offset & size, paint);
 
     List.generate((maxY / yAxisScale).ceil() + 1, (index) {
       final double number = maxY - index * yAxisScale;
 
-      _textPainter.text = TextSpan(
-          text: "${number.toStringAsFixed(xAxisLabelPrecision)}$xAxisLabelSuffixUnit",
-          style: textStyle
-      );
+      _textPainter.text =
+          TextSpan(text: "${number.toStringAsFixed(xAxisLabelPrecision)}$xAxisLabelSuffixUnit", style: textStyle);
       _textPainter.layout(minWidth: 0, maxWidth: constraints.maxWidth);
       _textPainter.paint(canvas, ui.Offset(offset.dx, offset.dy + (yAxisUnitHeight * index) - _textPainter.height));
     });

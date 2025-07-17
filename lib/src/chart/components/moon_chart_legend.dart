@@ -1,13 +1,11 @@
-
-
-part of chart_library;
-
-
+part of '../chart_lib.dart';
 
 class _MoonChartLegend extends LeafRenderObjectWidget {
   final String _legend;
 
-  const _MoonChartLegend(this._legend,);
+  const _MoonChartLegend(
+    this._legend,
+  );
 
   @override
   RenderObject createRenderObject(BuildContext context) {
@@ -27,25 +25,24 @@ class _MoonChartLegend extends LeafRenderObjectWidget {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is _MoonChartLegend &&
-        other._legend == _legend;
+    return other is _MoonChartLegend && other._legend == _legend;
   }
 
   @override
   int get hashCode => _legend.hashCode;
 }
 
-
 class _MoonChartLegendRenderBox extends RenderBox {
-
   late TextPainter _textPainter;
   final TextStyle _textStyle;
   String text;
 
-  _MoonChartLegendRenderBox({required this.text,})
-    :_textStyle = const TextStyle(fontSize: 10, color: Colors.black)
-  {
-    _textPainter = TextPainter(textDirection: TextDirection.ltr,);
+  _MoonChartLegendRenderBox({
+    required this.text,
+  }) : _textStyle = const TextStyle(fontSize: 10, color: Colors.black) {
+    _textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+    );
   }
 
   @override
@@ -61,7 +58,6 @@ class _MoonChartLegendRenderBox extends RenderBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-
     _textPainter.paint(context.canvas, offset);
   }
 }

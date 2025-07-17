@@ -1,8 +1,4 @@
-
-
-part of ui_model_library;
-
-
+part of 'ui_model_lib.dart';
 
 class MoonChartPointUIModel {
   final String x;
@@ -12,7 +8,6 @@ class MoonChartPointUIModel {
 
   @override
   bool operator ==(Object other) {
-
     if (other is MoonChartPointUIModel) {
       return x == other.x && y == other.y;
     }
@@ -21,5 +16,4 @@ class MoonChartPointUIModel {
 
   @override
   int get hashCode => x.hashCode ^ y.hashCode;
-
 }
