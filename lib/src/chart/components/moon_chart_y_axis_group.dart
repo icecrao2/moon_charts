@@ -1,11 +1,6 @@
-
-
-part of chart_library;
-
-
+part of '../chart_lib.dart';
 
 class _MoonChartYAxisGroup extends StatelessWidget {
-
   final int tapAreaCount;
   final double tapAreaWidth;
   final double tapAreaRightPadding;
@@ -20,7 +15,6 @@ class _MoonChartYAxisGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return RepaintBoundary(
       child: CustomPaint(
         painter: _MoonChartYAxisGroupCustomPainter(
@@ -33,7 +27,6 @@ class _MoonChartYAxisGroup extends StatelessWidget {
     );
   }
 }
-
 
 class _MoonChartYAxisGroupCustomPainter extends CustomPainter {
   int tapAreaCount;
@@ -50,7 +43,6 @@ class _MoonChartYAxisGroupCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-
     var paint = ui.Paint()
       ..color = line.dotColor
       ..strokeWidth = line.dotWidth
@@ -59,7 +51,7 @@ class _MoonChartYAxisGroupCustomPainter extends CustomPainter {
     final path = Path();
 
     List.generate(tapAreaCount, (index) {
-      double dx =  (tapAreaRightPadding * index) + (tapAreaWidth * index);
+      double dx = (tapAreaRightPadding * index) + (tapAreaWidth * index);
       double yUpPoint = 0;
       double yDownPoint = size.height;
 

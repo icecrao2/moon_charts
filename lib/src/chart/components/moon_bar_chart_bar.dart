@@ -1,4 +1,4 @@
-part of chart_library;
+part of '../chart_lib.dart';
 
 class _MoonBarChartBar extends LeafRenderObjectWidget {
   final List<MoonChartPointUIModel> nodeGroup;
@@ -62,8 +62,8 @@ class _MoonBarChartBarRenderBox extends _MoonChartRenderBoxBase<MoonChartBarStyl
     required super.maxY,
     required super.onPressed,
   }) : super(
-    style: barStyle,
-  );
+          style: barStyle,
+        );
 
   @override
   void paint(PaintingContext context, Offset offset) {
@@ -90,7 +90,8 @@ class _MoonBarChartBarRenderBox extends _MoonChartRenderBoxBase<MoonChartBarStyl
           path.moveTo(realScreenX + offset.dx, size.height + offset.dy);
           path.lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
           circlePath.addArc(
-            Rect.fromCircle(center: Offset(realScreenX + offset.dx, realScreenY + offset.dy), radius: paint.strokeWidth / 2),
+            Rect.fromCircle(
+                center: Offset(realScreenX + offset.dx, realScreenY + offset.dy), radius: paint.strokeWidth / 2),
             math.pi,
             math.pi,
           );

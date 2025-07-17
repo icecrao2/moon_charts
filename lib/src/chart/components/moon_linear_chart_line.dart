@@ -1,7 +1,4 @@
-
-
-part of chart_library;
-
+part of '../chart_lib.dart';
 
 class _MoonChartRenderBoxBase<T extends MoonChartStyle> extends RenderBox {
   late T style;
@@ -170,8 +167,8 @@ class _MoonLinearChartLineRenderBox extends _MoonChartRenderBoxBase<MoonChartLin
     required super.maxY,
     required super.onPressed,
   }) : super(
-    style: lineStyle,
-  );
+          style: lineStyle,
+        );
 
   @override
   void paint(PaintingContext context, Offset offset) {

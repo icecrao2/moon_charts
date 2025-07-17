@@ -1,5 +1,3 @@
-
-
 library chart_library;
 
 import 'dart:ui' as ui;
@@ -12,14 +10,18 @@ import 'package:flutter/scheduler.dart';
 
 import '../../moon_charts.dart';
 
-
 part 'moon_chart.dart';
 
 part 'components/moon_chart_selected_y_axis.dart';
+
 part 'components/moon_bar_chart_bar.dart';
+
 part 'components/moon_chart_y_axis_group.dart';
+
 part 'components/moon_chart_y_label.dart';
+
 part 'components/moon_linear_chart_line.dart';
+
 part 'components/moon_chart_legend.dart';
+
 part 'components/moon_chart_x_label.dart';
-part 'components/base_chart_render_box.dart';
