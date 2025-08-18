@@ -53,6 +53,8 @@ class _MoonBarChartBar extends LeafRenderObjectWidget {
   }
 }
 
+
+
 class _MoonBarChartBarRenderBox extends _MoonChartRenderBoxBase<MoonChartBarStyleUIModel> {
   _MoonBarChartBarRenderBox({
     required super.nodeGroup,
