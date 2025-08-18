@@ -65,6 +65,7 @@ class _MoonChartRenderBoxBase<T extends MoonChartStyle> extends RenderBox {
       _tapDownPosition = tapPosition.dx;
       double width = (style.itemBetweenPadding + style.touchAreaWidth) * nodeGroup.length;
       int index = ((tapPosition.dx / width) * nodeGroup.length).round();
+      index = index.clamp(0, nodeGroup.length - 1);
       _pointerDown = true;
       if (nodeGroup[index].y == null) {
         return;
@@ -89,11 +90,6 @@ class _MoonChartRenderBoxBase<T extends MoonChartStyle> extends RenderBox {
   double _interpolateValue(int index) {
     if (oldNodeGroup.isEmpty) {
       return nodeGroup[index].y ?? 0.0;
-    }
-    int length = math.min(oldNodeGroup.length, nodeGroup.length);
-    if (index < length) {
-      double oldY = oldNodeGroup[index].y ?? 0.0;
-      double newY = nodeGroup[index].y ?? 0.0;
     }
     if (oldNodeGroup.length > index) {
       double oldY = oldNodeGroup[index].y ?? 0.0;
