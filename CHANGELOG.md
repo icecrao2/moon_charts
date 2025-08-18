@@ -50,3 +50,7 @@
 ## 3.0.13
 
 * fix chart scroll width bug
+
+## 3.2.0
+
+* fix ValueNotifier problem

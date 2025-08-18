@@ -1,6 +1,6 @@
 part of 'ui_model_lib.dart';
 
-abstract class MoonChartStyle {
+sealed class MoonChartStyle {
   final double lineWidth;
   final Duration animationDuration;
   final double touchAreaWidth;
@@ -65,4 +65,5 @@ class MoonChartLineStyleUIModel extends MoonChartStyle {
             animationDuration: const Duration(milliseconds: 500),
             touchAreaWidth: 27,
             itemBetweenPadding: 10);
+
 }
