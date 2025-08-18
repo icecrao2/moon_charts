@@ -53,10 +53,6 @@ class _MoonLinearChartLine extends LeafRenderObjectWidget {
   }
 }
 
-
-
-
-
 class _MoonLinearChartLineRenderBox extends _MoonChartRenderBoxBase<MoonChartLineStyleUIModel> {
   _MoonLinearChartLineRenderBox({
     required super.nodeGroup,
@@ -82,25 +78,24 @@ class _MoonLinearChartLineRenderBox extends _MoonChartRenderBoxBase<MoonChartLin
     final Path path = Path();
     final Path circlePath = Path();
 
-    if (nodeGroup.isNotEmpty) {
-      int dataCount = nodeGroup.length;
-      for (int index = 0; index < dataCount; index++) {
-        if (nodeGroup[index].y == null) {
-          continue;
-        }
-        double realScreenX = index * size.width / dataCount;
-        double yValue = _interpolateValue(index);
-        double realScreenY = size.height - (yValue * (size.height / maxY));
-        if (index == 0) {
-          path.moveTo(realScreenX + offset.dx, realScreenY + offset.dy);
-        } else {
+    if(nodeGroup.isEmpty) return;
+
+    paintChart(
+      drawing: (index, realScreenX, realScreenY) {
+        if (nodeGroup[index].y == null) return;
+
+        index == 0 ?
+          path.moveTo(realScreenX + offset.dx, realScreenY + offset.dy) :
           path.lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
-        }
+
         circlePath.addOval(Rect.fromCircle(
           center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
           radius: style.unSelectedCircleRadius,
         ));
       }
+    );
+
+    if(nodeGroup.isNotEmpty) {
       canvas.drawPath(path, paint);
       canvas.drawPath(circlePath, circlePaint);
       _paintSelectedCircle(context, offset);
@@ -109,17 +104,21 @@ class _MoonLinearChartLineRenderBox extends _MoonChartRenderBoxBase<MoonChartLin
 
   void _paintSelectedCircle(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
+    final Paint circlePaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = style.selectedCircleColor;
+    final Path circlePath = Path();
+
     int index = hitXIndex;
+
+
     if (nodeGroup[index].y == null) {
       return;
     }
     double yValue = _interpolateValue(index);
     double realScreenX = index * size.width / nodeGroup.length;
     double realScreenY = size.height - (yValue * (size.height / maxY));
-    final Paint circlePaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = style.selectedCircleColor;
-    final Path circlePath = Path();
+
     circlePath.addOval(Rect.fromCircle(
       center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
       radius: style.selectedCircleRadius,

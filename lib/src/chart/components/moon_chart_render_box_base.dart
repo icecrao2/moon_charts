@@ -99,4 +99,19 @@ class _MoonChartRenderBoxBase<T extends MoonChartStyle> extends RenderBox {
       return nodeGroup[index].y ?? 0.0;
     }
   }
+
+
+  void paintChart({
+    required Function(int index, double realScreenX, double realScreenY) drawing
+  }) {
+    if (nodeGroup.isEmpty) return;
+    for (int index = 0; index < nodeGroup.length; index++) {
+      if (nodeGroup[index].y == null) continue;
+
+      final realScreenX = index * size.width / nodeGroup.length;
+      final yValue = _interpolateValue(index);
+      final realScreenY = size.height - (yValue * (size.height / maxY));
+      drawing(index, realScreenX, realScreenY);
+    }
+  }
 }

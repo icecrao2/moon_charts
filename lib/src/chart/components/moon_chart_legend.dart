@@ -20,16 +20,6 @@ class _MoonChartLegend extends LeafRenderObjectWidget {
       renderObject.markNeedsLayout();
     }
   }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    return other is _MoonChartLegend && other._legend == _legend;
-  }
-
-  @override
-  int get hashCode => _legend.hashCode;
 }
 
 class _MoonChartLegendRenderBox extends RenderBox {
