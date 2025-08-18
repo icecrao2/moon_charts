@@ -78,25 +78,25 @@ class _MoonBarChartBarRenderBox extends _MoonChartRenderBoxBase<MoonChartBarStyl
     final Path path = Path();
     final Path circlePath = Path();
 
-    if (nodeGroup.isNotEmpty) {
-      for (int index = 0; index < nodeGroup.length; index++) {
-        if (nodeGroup[index].y == null) {
-          continue;
-        }
-        double realScreenX = index * size.width / nodeGroup.length;
-        double yValue = _interpolateValue(index);
-        double realScreenY = size.height - (yValue * (size.height / maxY));
-        if (nodeGroup[index].y != 0) {
-          path.moveTo(realScreenX + offset.dx, size.height + offset.dy);
-          path.lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
-          circlePath.addArc(
-            Rect.fromCircle(
-                center: Offset(realScreenX + offset.dx, realScreenY + offset.dy), radius: paint.strokeWidth / 2),
-            math.pi,
-            math.pi,
-          );
-        }
-      }
+    if(nodeGroup.isEmpty) return;
+
+    paintChart(
+      drawing: (index, realScreenX, realScreenY) {
+        if (nodeGroup[index].y == 0) return;
+        path.moveTo(realScreenX + offset.dx, size.height + offset.dy);
+        path.lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
+        circlePath.addArc(
+          Rect.fromCircle(
+            center: Offset(realScreenX + offset.dx, realScreenY + offset.dy),
+            radius: paint.strokeWidth / 2
+          ),
+          math.pi,
+          math.pi,
+        );
+      },
+    );
+
+    if(nodeGroup.isNotEmpty) {
       canvas.drawPath(path, paint);
       canvas.drawPath(circlePath, circlePaint);
       _paintSelectedBar(context, offset);
@@ -114,6 +114,7 @@ class _MoonBarChartBarRenderBox extends _MoonChartRenderBoxBase<MoonChartBarStyl
       ..color = style.selectedColor;
     final Path path = Path();
     final Path circlePath = Path();
+
     int index = hitXIndex;
     if (nodeGroup[index].y == null) {
       return;
@@ -121,9 +122,12 @@ class _MoonBarChartBarRenderBox extends _MoonChartRenderBoxBase<MoonChartBarStyl
     if (nodeGroup[index].y == 0) {
       return;
     }
+
+
     double yValue = _interpolateValue(index);
     double realScreenX = index * size.width / nodeGroup.length;
     double realScreenY = size.height - (yValue * (size.height / maxY));
+
     path.moveTo(realScreenX + offset.dx, size.height + offset.dy);
     path.lineTo(realScreenX + offset.dx, realScreenY + offset.dy);
     circlePath.addArc(

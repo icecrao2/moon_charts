@@ -102,6 +102,7 @@ class _MoonChartState extends State<MoonChart> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.hitXIndex != hitXIndex) {
+      hitXIndexNotifier.dispose();
       hitXIndex = widget.hitXIndex;
       hitXIndexNotifier = ValueNotifier(hitXIndex);
       double scrollPoint = widget.hitXIndex * (_itemWidth + _itemBetweenPadding) - (_chartWidth / 2);
